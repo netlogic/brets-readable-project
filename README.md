@@ -32,14 +32,20 @@ __Server listening on port 5001, Ctrl+C to stop__
 
 We will now install the readable project I have built.
 
+
 Please open another terminal session in the project folder (directory) you
 cloned the server.
 
-Please enter:
+To get the source code you have two options:
 
-```git clone https://github.com/netlogic/brets-readable-project.git```
+1. Unzip the file sent with this project in the project folder
 
-please then go into that directory
+2. download the source via git
+  Steps for git download are simply:
+
+  ```git clone https://github.com/netlogic/brets-readable-project.git```
+
+please then go into the directory brets-readable-project
 
 ```cd brets-readable-project```
 
