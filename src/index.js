@@ -1,8 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+import Root from './containers/Root'
+import configureStore from './store/configureStore'
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+/** register the wrapper (Root) which will 
+ *  contain our provider and our routes
+ */
+ReactDOM.render(
+  <Root store={store} history={history} />,
+  document.getElementById('root')
+)
+
 registerServiceWorker();

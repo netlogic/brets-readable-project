@@ -7,9 +7,9 @@ import PostDetail from './containers/PostDetail'
 
 export default (
   <Route path="/" component={App}>
-    <Route path="/:category/:post_id"
+    <Route path="/:categories/:post_id"
            component={PostDetail} />
-    <Route path="/:Categories"
+    <Route path="/:categories"
            component={Categories} />
   </Route>
 )
