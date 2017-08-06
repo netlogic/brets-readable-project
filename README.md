@@ -37,4 +37,20 @@ cloned the server.
 
 Please enter:
 
+```git clone https://github.com/netlogic/brets-readable-project.git```
+
+please then go into that directory
+
+```cd brets-readable-project```
+
+enter the following command to install external npm modules
+
+```npm install```
+
+once the npm finishes and the command prompt return please enter
+
+```npm start```
+
+If all has gone well you can now browse to the following location
+to start using the project.
 
