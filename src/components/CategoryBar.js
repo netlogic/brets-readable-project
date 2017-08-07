@@ -31,12 +31,15 @@ class CategoryBar extends Component {
                     }
                     )
                 )}
-                {!this.props.categories && (
+                {this.props.errorLoading && (
                     (
-                        <Text>No Categories Loaded</Text>
+                        <Text>this.props.errorText</Text>
                     )
                 )
                 }
+                {this.props.loading && (
+                    <Text>Loading Categories</Text>
+                )}
             </View>
         );
     }
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
