@@ -63,5 +63,13 @@ to start using the project.
 A lot of this project follows the structure of reactjs/redux
 I found it very clean and URLS were supported.
 That repository can be found at:
-https://github.com/reactjs/redux/blob/v3.6.0/examples/real-world/src/index.js
+```https://github.com/reactjs/redux/blob/v3.6.0/examples/real-world/src/index.js```
+This blog spot about react-redux-router also was guiding me.
+```https://blog.marvelapp.com/managing-the-url-in-a-redux-app/```
+
+uuids for items records are created via package:
+node-uuid https://github.com/broofa/node-uuid
+
+
+
 
