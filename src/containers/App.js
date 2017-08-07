@@ -12,12 +12,15 @@ import { Link , browserHistory } from 'react-router'
 
 import { updateTime } from '../actions'
 
+import CategoryBar from '../components/CategoryBar'
+
 class App extends Component {
   render() {
     let me = this;
 
     return (
       <div className="App">
+        <CategoryBar/>
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
