@@ -34,7 +34,7 @@ class App extends Component {
           Posts
         </Link>
         <TouchableHighlight onPress={() => {
-          browserHistory.push("/categories");
+          me.props.changeRoute("/categories");
           me.props.updateTime((new Date()))
         }}>
           <View>

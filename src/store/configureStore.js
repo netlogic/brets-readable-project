@@ -7,7 +7,7 @@ import {routerMiddleware} from 'react-router-redux';
 const configureStore = (history,preloadedState) => createStore(
   rootReducer,
    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(thunk, api,routerMiddleware(history))
+   applyMiddleware(thunk, api,routerMiddleware(history))
 )
 
 export default configureStore

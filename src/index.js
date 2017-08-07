@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './index.css';
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
