@@ -6,13 +6,22 @@ import Root from './containers/Root'
 import configureStore from './store/configureStore'
 import ReactNativeWeb from 'react-native-web';
 
-const store = configureStore()
-const history = syncHistoryWithStore(browserHistory, store)
+
+
+import {
+  createHistory,
+} from 'history'
+
+const historyObject =  browserHistory
+
+const store = configureStore(historyObject)
+
+const theHistory = syncHistoryWithStore(historyObject, store)
 
 /** register the wrapper (Root) which will 
  *  contain our provider and our routes
  */
 ReactNativeWeb.render(
-  <Root store={store} history={history} />,
+  <Root store={store} history={theHistory} />,
   document.getElementById('root')
 )

@@ -2,7 +2,7 @@
  * 
  */
 import * as ActionTypes from '../actions'
-import { routerReducer as routing } from 'react-router-redux'
+import { routerReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import * as constants from '../constants'
 
@@ -45,7 +45,7 @@ const appState = (state = initialState, action) => {
 
 
 export default combineReducers( {
-        routing, 
         appState,
-        errorMessage} 
+        errorMessage,
+        routing : routerReducer} 
     );

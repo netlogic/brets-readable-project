@@ -8,14 +8,10 @@ import PostDetails from './containers/PostDetails'
 import { connect } from 'react-redux';
 
 const Routes  =  (
-    <Route exact path="/" component={App}>
-    <IndexRedirect to='/categories' />
-        <Route exact path="/categories"
-            component={Categories} />
-        <Route path="/catergory/:type"
-            component={PostDetails} />
-        <Route path="/silly"
-            component={PostDetails} />
+    <Route  path="/" component={App}>
+        <Route path="categories" component={Categories} />
+        <Route path="catergory/:type" component={PostDetails} />
+        <Route path="silly" component={PostDetails} />
     </Route>
 )
 

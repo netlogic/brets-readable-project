@@ -8,7 +8,7 @@ import { push } from 'react-router-redux'
 import logo from '../logo.svg';
 import './App.css';
 
-import { Link } from 'react-router'
+import { Link , browserHistory } from 'react-router'
 
 import { updateTime } from '../actions'
 
@@ -34,7 +34,7 @@ class App extends Component {
           Posts
         </Link>
         <TouchableHighlight onPress={() => {
-          me.props.changeRoute("/categories");
+          browserHistory.push("/categories");
           me.props.updateTime((new Date()))
         }}>
           <View>
