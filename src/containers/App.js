@@ -13,6 +13,7 @@ import { Link, browserHistory } from 'react-router'
 import { updateTime } from '../actions'
 
 import CategoryBar from '../components/CategoryBar'
+import Posts from '../components/Posts'
 
 class App extends Component {
   render() {
@@ -49,6 +50,7 @@ class App extends Component {
             <Text>{this.props.time.toString()}</Text>
           </View>
         </TouchableHighlight>
+        <Posts/>
       </View>
     );
   }

@@ -3,7 +3,7 @@ import { Route, Router } from 'react-router'
 
 import App from './containers/App'
 import Categories from './containers/Categories'
-import Posts from './containers/Posts'
+import Posts from './components/Posts'
 import PostDetails from './containers/PostDetails'
 import { connect } from 'react-redux';
 import PathNotFound from './containers/PathNotFound'

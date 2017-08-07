@@ -57,6 +57,26 @@ const appState = (state = initialState, action) => {
                 categoriesLoading: action.categoriesLoading
             }
             break;
+        case constants.POSTS_RECEIVED:
+            return {
+                ...state,
+                posts: action.posts,
+            }
+            break;
+        case constants.CATEGORIES_LOADING:
+            return {
+                ...state,
+                postsLoading: action.postsLoading,
+            }
+            break;
+        case constants.CATEGORIES_ERROR:
+            return {
+                ...state,
+                postsError: action.postsError,
+                postsErrorText: action.postsErrorText,
+                postsLoading: action.postsLoading
+            }
+            break;
 
         default:
             return state
