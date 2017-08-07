@@ -70,6 +70,11 @@ This blog spot about react-redux-router also was guiding me.
 uuids for items records are created via package:
 node-uuid https://github.com/broofa/node-uuid
 
+ As I suck at CSS I have been building a large number of my apps with react-native-web
+ For best display please user chrome as I have not tested the presentation of
+ my app on other browsers.  Unfortunately flex-box screws up and normally
+ hacks need to be implemented so presentation is improved on IE and FireFox.
 
+ 
 
 
