@@ -1,20 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Provider } from 'react-redux'
+import { connect, Provider } from 'react-redux'
+import { Router } from 'react-router'
+
 import routes from '../routes'
-import { Router , useRouterHistory} from 'react-router'
-import {createMemoryHistory} from 'history';
 
-const appHistory = useRouterHistory(createMemoryHistory)({});
-
-const Root = ({ store }) => (
+const Root = ({ store, history }) => (
   <Provider store={store}>
-    <Router history={appHistory} routes={routes} />
+    <Router history={history} routes={routes} />
   </Provider>
 )
 
 Root.propTypes = {
   store: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 }
 
-export default Root
+export default connect(null,null)(Root)

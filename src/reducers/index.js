@@ -4,18 +4,48 @@
 import * as ActionTypes from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
+import * as constants from '../constants'
 
 
-const errorMessage = (state = null, action) => {
+const initialErrorState = null;
+
+
+const errorMessage = (state = initialState, action) => {
   const { type, error } = action
 
-//   if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-//     return null
-//   } else if (error) {
-//     return error
-//   }
+  if (type === constants.RESET_ERROR_MESSAGE) {
+    return null
+  } else if (error) {
+    return error
+  }
 
   return state
 }
 
-export default combineReducers( {routing, errorMessage} );
+
+
+const initialState = {
+    time : (new Date())
+}
+
+const appState = (state = initialState, action) => {
+  switch (action.type) {
+    case constants.UPDATE_TIME:
+      var { time } = action
+        return {
+          ...state,
+          time : time,
+        }
+        break;
+
+    default:
+      return state
+  }
+}
+
+
+export default combineReducers( {
+        routing, 
+        appState,
+        errorMessage} 
+    );

@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
-import {View} from 'react-native-web'
+import { View, TouchableHighlight, Text } from 'react-native-web'
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { push } from 'react-router-redux'
+
 import logo from '../logo.svg';
 import './App.css';
 
+import { Link } from 'react-router'
+
+import { updateTime } from '../actions'
+
 class App extends Component {
   render() {
+    let me = this;
+
     return (
       <div className="App">
         <div className="App-header">
@@ -14,11 +25,39 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <View style={{height:30, backgroundColor : 'red', width : '100%'}}>
+        <View style={{ height: 30, backgroundColor: 'red', width: '100%' }}>
+        </View>
+        <Link key={'cat1'} to={{ pathname: '/categories', query: {} }}>
+          Categories
+        </Link>
+        <Link key={'posts1'} to={'/silly'}>
+          Posts
+        </Link>
+        <TouchableHighlight onPress={() => {
+          me.props.changeRoute("/categories");
+          me.props.updateTime((new Date()))
+        }}>
+          <View>
+            <Text>here</Text>
+            <Text>{this.props.time.toString()}</Text>
           </View>
+        </TouchableHighlight>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => ({
+  time: state.appState.time,
+})
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeRoute: (url) => dispatch(push(url)),
+    updateTime: (time) => dispatch(updateTime(time)),
+    dispatch,
+    
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

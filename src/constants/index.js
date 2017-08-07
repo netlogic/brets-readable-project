@@ -1,0 +1,2 @@
+export const UPDATE_TIME = 'UPDATE_TIME'
+export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
