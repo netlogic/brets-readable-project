@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { fetchComments, vote } from '../actions'
+import { fetchComments, vote, deletePost } from '../actions'
+import Popup from 'react-popup';
 
 function keepShort(a, len) {
     if (a.length > len) {
@@ -69,7 +70,7 @@ class Post extends Component {
                         <Text style={{ fontSize: 20, margin: 5 }}>&#128077;</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => {
-                        me.props.deletePost(post.id);
+                        me.handleDelete(post);
                     }}>
                         <Text style={{ fontSize: 20, margin: 5 }}>&#128465;</Text>
                     </TouchableHighlight>
@@ -78,7 +79,39 @@ class Post extends Component {
             </View>
         );
     }
+
+
+    handleDelete(post) {
+        let me = this;
+        Popup.registerPlugin('deletePost', function (callback) {
+            let promptValue = null;
+            let promptChange = function (value) {
+                promptValue = value;
+            };
+
+            this.create({
+                title: 'Delete Post',
+                content: <Text>{"Are you sure you want to delete post '" + post.title + "'"}</Text>,
+                buttons: {
+                    left: ['cancel'],
+                    right: [{
+                        text: 'DELETE',
+                        className: 'success',
+                        action: function () {
+                            callback(true);
+                            Popup.close();
+                        }
+                    }]
+                }
+            });
+        });
+        Popup.plugins().deletePost(function (value) {
+            me.props.deletePost( post.id );
+        });
+    }
 }
+
+
 
 const mapStateToProps = (state, ownProps) => {
     let commentsForPost = state.appState.comments[ownProps.post.id];
@@ -98,6 +131,7 @@ function mapDispatchToProps(dispatch) {
         changeRoute: (url) => dispatch(push(url)),
         fetchComments: (postId) => dispatch(fetchComments(postId)),
         vote: (postId, upvote) => dispatch(vote(postId, upvote)),
+        deletePost: (postId) => dispatch(deletePost(postId)),
         dispatch,
     };
 }

@@ -57,7 +57,7 @@ function updatePost(state, postId, error, errorText, loading, post) {
         return state;
     }
 
-    let newPosts = state.posts.filter((a) => a.id != postId);
+    let newPosts = state.posts.filter((a) => a.id !== postId);
     let oldPost = state.quickPostSearch[postId];
     if (!oldPost) {
         return state;
@@ -88,6 +88,49 @@ function updatePost(state, postId, error, errorText, loading, post) {
     newQuickPostSearch[newPost.id] = newPost;
 
 
+    return {
+        ...state,
+        posts: newPosts,
+        newQuickPostSearch
+    }
+}
+
+
+/** delete a post with info
+ * about its deletion processing
+ */
+function deletingPost(state, postId, error, errorText, loading, post) {
+    if (!state.posts) {
+        return state;
+    }
+
+    let newPosts = state.posts.filter((a) => a.id !== postId);
+    let oldPost = state.quickPostSearch[postId];
+    if (!oldPost) {
+        return state;
+    }
+
+    // make a new post object 
+    let newPost;
+      let newQuickPostSearch = Object.assign({}, state.quickPostSearch);
+       
+
+    if (post) {
+        // we need to remove this post from the system
+        // do to new posts
+        delete newQuickPostSearch[postId]; // remove the post property
+    } else {
+        
+
+        newPost = {
+            ...oldPost,
+            deletingError: error,
+            deletingErrorText: errorText,
+            deleting: loading
+        }
+        newPosts.push(newPost);
+        newQuickPostSearch[newPost.id] = newPost;
+    }
     return {
         ...state,
         posts: newPosts,
@@ -193,6 +236,13 @@ const appState = (state = initialState, action) => {
         case constants.VOTING_LOADING:
             return updatePost(state, action.postId, undefined, undefined, action.loading, undefined);
 
+        case constants.DELETE_POST_COMPLETE:
+            return deletingPost( state, action.postId, undefined, undefined, false, action.postId );
+
+        case  constants.DELETE_POST_ERROR:
+            return deletingPost( state, action.postId,  action.error, action.errorText, false, undefined);
+        case  constants.DELETING_POST:
+            return deletingPost(state, action.postId, undefined, undefined, action.loading, undefined);
         default:
             return state
     }

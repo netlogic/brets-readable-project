@@ -15,6 +15,7 @@ import { updateTime } from '../actions'
 import CategoryBar from '../components/CategoryBar'
 import SortBar from '../components/SortBar'
 import Posts from '../components/Posts'
+import Popup from 'react-popup';
 
 class App extends Component {
   render() {
@@ -23,6 +24,7 @@ class App extends Component {
     
     return (
       <View style={styles.container}>
+        <Popup/>
         <View style={styles.appheader}>
           <Text style={styles.headerLine1}>Readable</Text>
           <Text style={styles.headerLine2}> - (An udacity project by BDS)</Text>
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
       width : 120,
       fontWeight : 'bold',
       borderRadius : 10,
-      overFlow : 'hidden',
+      overflow : 'hidden',
       textAlign : 'center',
       padding : 10,
   },

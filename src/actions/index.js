@@ -192,3 +192,46 @@ export function vote(postId, upvote) {
             .catch((e) => dispatch(votingError(postId, true, e.toString())));
     };
 }
+
+export const deletePostComplete = (postId) => ({
+    type: constants.DELETE_POST_COMPLETE,
+    postId: postId,
+});
+
+export const deletingPostError = (postId, error, errorText) => ({
+    type: constants.DELETE_POST_ERROR,
+    error: error,
+    errorText: errorText,
+    loading: false,
+    postId: postId,
+});
+
+export const deletingPost = (postId, loading) => ({
+    type: constants.DELETING_POST,
+    loading: loading,
+    postId: postId
+});
+
+export function deletePost(postId) {
+    return (dispatch) => {
+        dispatch(deletingPost(postId, true));
+        fetch(buildCmdURL("posts/" + postId),
+            {
+                headers: {
+                    'Authorization': MYTOKEN,
+                },
+                method: 'delete',
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(deletingPost(postId, false));
+                return response;
+            })
+            .then( () => {
+                dispatch(deletePostComplete(postId));
+            })
+            .catch((e) => dispatch(deletingPostError(postId, true, e.toString())));
+    };
+}
