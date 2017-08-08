@@ -79,6 +79,10 @@ class Post extends Component {
                 ) 
                 }
                 <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+                    <Text>&#x1f464;</Text>
+                    <Text style={styles.infoLineText}>{post.author}</Text>
+                </View>
                 <View style={styles.infoLine}>
                     <TouchableHighlight onPress={() => {
                         me.props.changeRoute("/category/" + post.category);

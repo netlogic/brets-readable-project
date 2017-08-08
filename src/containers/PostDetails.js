@@ -18,7 +18,7 @@ import { fetchPostDetail } from '../actions'
 class PostDetails extends Component {
 
     componentDidMount() {
-        if ( this.props.params.postId ) {
+        if (this.props.params.postId) {
             this.props.fetchPostDetail(this.props.params.postId);
         }
     }
@@ -29,13 +29,13 @@ class PostDetails extends Component {
 
         let msg;
 
-        if ( this.props.loadingPostDetail ) {
-            msg  = "Post loading..."
-        } else if  (this.props.loadingPostDetailError ) {
+        if (this.props.loadingPostDetail) {
+            msg = "Post loading..."
+        } else if (this.props.loadingPostDetailError) {
             msg = this.props.loadingPostDetailError;
-        } else  if ( !postId ) {
+        } else if (!postId) {
             msg = "No post id specified";
-        } else if ( !this.props.postDetail ) {
+        } else if (!this.props.postDetail) {
             msg = "Post loading...";
         }
 
@@ -52,7 +52,7 @@ class PostDetails extends Component {
 
         let keyVal = this.props.params.type || "default"
 
-           return (
+        return (
             <View style={styles.container}>
                 <Popup />
                 <View style={styles.appheader}>
@@ -61,9 +61,11 @@ class PostDetails extends Component {
                     }}>
                         <Text style={styles.headerLine1}>{'<BACK    '}</Text>
                     </TouchableHighlight>
-                    <Text style={styles.headerLine1}>{this.props.postDetail.tile}</Text>
+                    <Text style={styles.headerLine1}>{this.props.postDetail.title}</Text>
                 </View>
-                <Post post={this.props.postDetail} detailed={true}/>
+                <View style={{ marginLeft: 15 }}>
+                    <Post post={this.props.postDetail} detailed={true} />
+                </View>
             </View>
         );
     }
@@ -71,15 +73,15 @@ class PostDetails extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
     time: state.appState.time,
-    postDetail : state.appState.postDetail,
-    loadingPostDetail : state.appState.postDetailLoading,
-    loadingPostDetailError :  state.appState.postDetailErrorLoading,
+    postDetail: state.appState.postDetail,
+    loadingPostDetail: state.appState.postDetailLoading,
+    loadingPostDetailError: state.appState.postDetailErrorLoading,
 })
 
 function mapDispatchToProps(dispatch) {
     return {
         goBack: () => dispatch(goBack()),
-        fetchPostDetail : (postId)  => dispatch(fetchPostDetail(postId)),
+        fetchPostDetail: (postId) => dispatch(fetchPostDetail(postId)),
         dispatch,
 
     };
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333333',
         marginLeft: 15,
-        marginTop: 15,
+        marginTop: 30,
         marginBottom: 15,
     },
     headerLine2: {
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         color: '#333333',
         marginLeft: 15,
+        marginTop: 10,
     }
 }
 );

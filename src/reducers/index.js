@@ -287,15 +287,123 @@ const appState = (state = initialState, action) => {
             return deletingPost(state, action.postId, action.error, action.errorText, false, undefined);
         case constants.DELETING_POST:
             return deletingPost(state, action.postId, undefined, undefined, action.loading, undefined);
+
+        case constants.ADDING_POST_DETAIL_RECEIVED:
+            return state;
+
         default:
             return state
     }
 }
 
+
+const intialStateAddPost = {
+    title: "",
+    body: "",
+    author: "",
+    category: "redux",
+    valid: false
+}
+
+function addPostValid( t, b, a, c ) {
+    if ( a && a.length > 0 ) {
+        if ( b && b.length > 0 ) {
+            if ( c && c.length > 0 ) {
+                if ( t && t.length > 0 ) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+const addPost = (state = intialStateAddPost, action) => {
+    switch (action.type) {
+        case constants.ADD_POST_TITLE:
+            return {
+                ...state,
+                title: action.title,
+                valid : addPostValid( action.title, state.body, state.author, state.category )
+            }
+        case constants.ADD_POST_BODY:
+            return {
+                ...state,
+                body: action.body,
+                  valid : addPostValid( state.title, action.body, state.author, state.category )
+            }
+        case constants.ADD_POST_AUTHOR:
+            return {
+                ...state,
+                author: action.author,
+                  valid : addPostValid( state.title, state.body, action.author, state.category )
+            }
+        case constants.ADD_POST_CATEGORY:
+            return {
+                ...state,
+                category: action.category,
+                  valid : addPostValid( state.title, state.body, state.author, action.category )
+            }
+        case constants.ADD_POST_CLEAR:
+            return {
+                ...state,
+                title: "",
+                body: "",
+                author: "",
+                category: "redux",
+                valid: false,
+                loading : false ,
+                addingPostDetailError : undefined
+            }
+        case constants.ADDINGPOST_LOADING:
+            return {
+                ...state,
+                loading : action.loading
+            }
+        case constants.ADDINGPOST_ERROR:
+            return {
+                ...state,
+                addingPostDetailError : action.addingPostDetailError,
+                loading : false,
+            }
+        case constants.ADDING_POST_DETAIL_RECEIVED:
+            return {
+                ...state,
+                addingPostDetailError : undefined,
+                loading : false,
+                addingPostDetail : false,
+            }
+        default:
+            return state;
+    }
+}
+
+export const addingPost = loading => ({
+    type : constants.ADDINGPOST_LOADING,
+    loading : loading,
+});
+
+export const addingPostError = (error, errorText) => ({
+    type: constants.ADDINGPOST_ERROR,
+    addingPostDetailError: errorText,
+    addingPostDetail: false
+});
+
+export const addedPost = post => ({
+    type: constants.ADDING_POST_DETAIL_RECEIVED,
+    postDetail: post,
+    addingPostDetail: false,
+    addingPostDetailError: undefined
+});
+
+
+
+
 export default combineReducers({
     appState,
     errorMessage,
     sorting,
+    addPost,
     routing: routerReducer
 }
 );

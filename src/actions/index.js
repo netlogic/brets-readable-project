@@ -3,6 +3,7 @@
  */
 
 import * as constants from '../constants';
+import uuid from 'uuid/v4';
 
 const HOST_URL = "http://localhost:5001/";
 const MYTOKEN = Math.random() * 100;
@@ -176,7 +177,7 @@ export function vote(postId, upvote) {
                     'Content-Type': 'application/json',
                 },
                 method: 'POST',
-                body: JSON.stringify({ option : upvote ? "upVote" : "downVote" } )
+                body: JSON.stringify({ option: upvote ? "upVote" : "downVote" })
             })
             .then((response) => {
                 if (!response.ok) {
@@ -229,7 +230,7 @@ export function deletePost(postId) {
                 dispatch(deletingPost(postId, false));
                 return response;
             })
-            .then( () => {
+            .then(() => {
                 dispatch(deletePostComplete(postId));
             })
             .catch((e) => dispatch(deletingPostError(postId, true, e.toString())));
@@ -239,8 +240,8 @@ export function deletePost(postId) {
 export const postDetailReceived = post => ({
     type: constants.POST_DETAIL_RECEIVED,
     postDetail: post,
-    loadingPostDetail : false,
-    loadingPostDetailError : undefined
+    loadingPostDetail: false,
+    loadingPostDetailError: undefined
 });
 
 export const postDetailError = (error, errorText) => ({
@@ -252,15 +253,15 @@ export const postDetailError = (error, errorText) => ({
 export const postDetailLoading = (loading) => ({
     type: constants.POST_DETAIL_LOADING,
     loadingPostDetail: loading,
-    loadingPostDetailError : undefined
+    loadingPostDetailError: undefined
 });
 
 export function fetchPostDetail(postId) {
     return (dispatch) => {
         dispatch(postDetailLoading(true));
-        fetch(buildCmdURL("posts/" + postId ), { headers: { 'Authorization': MYTOKEN } })
+        fetch(buildCmdURL("posts/" + postId), { headers: { 'Authorization': MYTOKEN } })
             .then((response) => {
-                if (!response.ok || response.status === 404 ) {
+                if (!response.ok || response.status === 404) {
                     throw Error(response.statusText);
                 }
                 dispatch(postDetailLoading(false));
@@ -274,6 +275,91 @@ export function fetchPostDetail(postId) {
     };
 }
 
+export const addingPost = loading => ({
+    type : constants.ADDINGPOST_LOADING,
+    loading : loading,
+});
+
+export const addingPostError = (error, errorText) => ({
+    type: constants.ADDINGPOST_ERROR,
+    addingPostDetailError: errorText,
+    loading: false
+});
+
+export const addedPost = post => ({
+    type: constants.ADDING_POST_DETAIL_RECEIVED,
+    postDetail: post,
+    loading: false,
+    addingPostDetailError: undefined,
+    loading : false
+});
+
+
+export function addPost(title, body, author, category) {
+    return (dispatch) => {
+        dispatch(addingPost(true));
+        fetch(buildCmdURL("posts"), {
+            headers: {
+                'Authorization': MYTOKEN,
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                title: title, body: body,
+                timestamp: Date.now(),
+                author: author, 
+                category: category,
+                id : uuid()
+            })
+        })
+            .then((response) => {
+                if (!response.ok ) {
+                    throw Error(response.statusText);
+                }
+                dispatch(addingPost(false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((post) => {
+                dispatch(addedPost(post));
+            })
+            .catch((e) => dispatch(addingPostError(true, e.toString())));
+    };
+}
+
 export const clearPostDetail = () => ({
     type: constants.POST_DETAIL_CLEAR,
 });
+
+
+const intialStateAddPost = {
+    title: "",
+    body: "",
+    author: "",
+    category: "redux",
+}
+
+export const setAddPostTitle = title => ({
+    type: constants.ADD_POST_TITLE,
+    title: title
+});
+
+export const setAddPostBody = body => ({
+    type: constants.ADD_POST_BODY,
+    body: body
+});
+
+export const setAddPostAuthor = author => ({
+    type: constants.ADD_POST_AUTHOR,
+    author: author
+});
+
+export const setAddPostCategory = category => ({
+    type: constants.ADD_POST_CATEGORY,
+    category: category
+});
+
+export const clearAddPost = () => ({
+    type: constants.ADD_POST_CLEAR,
+});
+

@@ -8,14 +8,12 @@ import { push } from 'react-router-redux'
 import logo from '../logo.svg';
 import './App.css';
 
-import { Link, browserHistory } from 'react-router'
-
-import { updateTime } from '../actions'
-
 import CategoryBar from '../components/CategoryBar'
 import SortBar from '../components/SortBar'
 import Posts from '../components/Posts'
 import Popup from 'react-popup';
+
+import {clearAddPost} from '../actions'
 
 class App extends Component {
   render() {
@@ -28,7 +26,12 @@ class App extends Component {
         <View style={styles.appheader}>
           <Text style={styles.headerLine1}>Readable</Text>
           <Text style={styles.headerLine2}> - (An udacity project by BDS)</Text>
-          <TouchableHighlight style={{marginLeft:50}}>
+          <TouchableHighlight style={{marginLeft:50}} onPress={
+              ()=>{
+                  me.props.clearAddPost();
+                  me.props.changeRoute("/addPost");
+              }
+          }>
             <Text style={styles.addPostText} >ADD POST</Text>
           </TouchableHighlight>
         </View>
@@ -47,9 +50,8 @@ const mapStateToProps = (state, ownProps) => ({
 function mapDispatchToProps(dispatch) {
   return {
     changeRoute: (url) => dispatch(push(url)),
-    updateTime: (time) => dispatch(updateTime(time)),
+    clearAddPost : () => dispatch(clearAddPost()),
     dispatch,
-
   };
 }
 
