@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
-import { push  } from 'react-router-redux'
-import {fetchComments} from '../actions'
+import { push } from 'react-router-redux'
+import { fetchComments, vote } from '../actions'
 
 function keepShort(a, len) {
     if (a.length > len) {
@@ -16,18 +16,18 @@ function keepShort(a, len) {
 class Post extends Component {
 
     componentDidMount() {
-       this.props.fetchComments(this.props.post.id);
+        this.props.fetchComments(this.props.post.id);
     }
 
     renderComments() {
-        if ( this.props.loading  ) {
+        if (this.props.loading) {
             return <Text>loading comments...</Text>
         }
-        if ( this.props.errorLoading ) {
+        if (this.props.errorLoading) {
             let errormsg = ```error loading comments (${this.props.errorText})```;
             return (<Text>{errormsg}</Text>);
         }
-        return ( <Text>{this.props.comments.length}</Text> );
+        return (<Text>{this.props.comments.length}</Text>);
     }
 
     render() {
@@ -36,8 +36,8 @@ class Post extends Component {
 
         console.log(post);
 
-        let timestamp = new Date( parseInt(post.timestamp));
-        let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US") 
+        let timestamp = new Date(parseInt(post.timestamp));
+        let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US")
 
         return (
             <View>
@@ -50,21 +50,23 @@ class Post extends Component {
                 <Text numberOfLines={1} style={styles.bodyLine}>{keepShort(post.body, 60)}</Text>
 
                 <View style={styles.infoLine}>
-                    <TouchableHighlight onPress={()=>{
-                            me.props.changeRoute("/category/" + post.category);
-                        }}>
+                    <TouchableHighlight onPress={() => {
+                        me.props.changeRoute("/category/" + post.category);
+                    }}>
                         <Text style={styles.infoLineText}>{'Category: ' + post.category}</Text>
                     </TouchableHighlight>
                     <Text style={styles.infoLineTime}>{displayTime}</Text>
-                    
-                    <TouchableHighlight onPress={()=>{
+
+                    <TouchableHighlight onPress={() => {
+                        me.props.vote(post.id, false);
                     }}>
-                        <Text style={{fontSize:20, margin:5}}>&#128078;</Text>
+                        <Text style={{ fontSize: 20, margin: 5 }}>&#128078;</Text>
                     </TouchableHighlight>
                     <Text>{post.voteScore}</Text>
-                    <TouchableHighlight onPress={()=>{
+                    <TouchableHighlight onPress={() => {
+                        me.props.vote(post.id, true);
                     }}>
-                        <Text  style={{fontSize:20, margin:5}}>&#128077;</Text>
+                        <Text style={{ fontSize: 20, margin: 5 }}>&#128077;</Text>
                     </TouchableHighlight>
                 </View>
                 {this.renderComments()}
@@ -75,11 +77,11 @@ class Post extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     let commentsForPost = state.appState.comments[ownProps.post.id];
-    if ( !commentsForPost ) {
-        commentsForPost = { comments : [] ,loading : false, errorLoading : false, errorText : null };
+    if (!commentsForPost) {
+        commentsForPost = { comments: [], loading: false, errorLoading: false, errorText: null };
     }
-    return   {
-        comments: commentsForPost.comments || [] ,
+    return {
+        comments: commentsForPost.comments || [],
         loading: commentsForPost.loading,
         errorLoading: commentsForPost.errorLoading,
         errorText: commentsForPost.errorText,
@@ -90,6 +92,7 @@ function mapDispatchToProps(dispatch) {
     return {
         changeRoute: (url) => dispatch(push(url)),
         fetchComments: (postId) => dispatch(fetchComments(postId)),
+        vote: (postId, upvote) => dispatch(vote(postId, upvote)),
         dispatch,
     };
 }
@@ -120,22 +123,22 @@ const styles = StyleSheet.create({
         //textDecoration: 'underline',
         marginRight: 10,
     },
-    infoLineText : {
-        fontSize : 12,
-        fontWeight : 'lighter',
-        color : '#333333'
+    infoLineText: {
+        fontSize: 12,
+        fontWeight: 'lighter',
+        color: '#333333'
     },
-        infoLineTime : {
-        fontSize : 12,
-        fontWeight : 'lighter',
-        color : '#333333',
-        marginLeft : 5,
-        marginLeft : 5,
+    infoLineTime: {
+        fontSize: 12,
+        fontWeight: 'lighter',
+        color: '#333333',
+        marginLeft: 5,
+        marginLeft: 5,
     },
-    bodyLine : {
-        fontSize : 14,
-        fontWeight : 'lighter',
-        color : '#333333'
+    bodyLine: {
+        fontSize: 14,
+        fontWeight: 'lighter',
+        color: '#333333'
     },
 
 }

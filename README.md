@@ -1,6 +1,6 @@
 Welcome to the review of my readable project.
 
-The readable project needs the backend server supplied by udacity.
+## The readable project needs the backend server supplied by udacity.
 
 Please make sure you have node and npm installed on your machine.
 
@@ -30,7 +30,7 @@ If all went well the following message should appear
 
 __Server listening on port 5001, Ctrl+C to stop__
 
-We will now install the readable project I have built.
+## We will now install the readable project I have built.
 
 
 Please open another terminal session in the project folder (directory) you
@@ -57,8 +57,12 @@ once the npm finishes and the command prompt return please enter
 
 ```npm start```
 
+## The project
 If all has gone well you can now browse to the following location
 to start using the project.
+
+```http://localhost:3000```
+
 
 A lot of this project follows the structure of reactjs/redux
 I found it very clean and URLS were supported.
@@ -74,11 +78,17 @@ uuids for items records are created via package:
 node-uuid https://github.com/broofa/node-uuid
 
  As I suck at CSS I have been building a large number of my apps with react-native-web
- For best display please user chrome as I have not tested the presentation of
+ For best display please use chrome as I have not tested the presentation of
  my app on other browsers.  Unfortunately flex-box screws up and normally
  hacks need to be implemented so presentation is improved on IE and FireFox.
 
-Server could be made better to return comment count with post to stop multiple requests on post view
+Server could be made better to return comment count with post to stop multiple requests on post view.
+
+Did not have time to work with a UX designer.  Application sorely needs some guidance on UX.
+But I believe (hopefully) all items in rubric have been met.
+
+Not be allowed to use state makes some things trickier, but overall react-redux is fun to play with.
+
 
 
 

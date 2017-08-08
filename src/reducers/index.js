@@ -49,6 +49,52 @@ const initialState = {
     comments: {},
 }
 
+/** update a post with additional information
+ * about its vote processing
+ */
+function updatePost(state, postId, error, errorText, loading, post) {
+    if (!state.posts) {
+        return state;
+    }
+
+    let newPosts = state.posts.filter((a) => a.id != postId);
+    let oldPost = state.quickPostSearch[postId];
+    if (!oldPost) {
+        return state;
+    }
+
+    // make a new post object 
+    let newPost;
+
+    if (post) {
+        newPost = {
+            ...post,
+            votingError: error,
+            votingErrorText: errorText,
+            voting: loading
+        }
+    } else {
+        newPost = {
+            ...oldPost,
+            votingError: error,
+            votingErrorText: errorText,
+            voting: loading
+        }
+    }
+
+    newPosts.push(newPost);
+
+    let newQuickPostSearch = Object.assign({}, state.quickPostSearch);
+    newQuickPostSearch[newPost.id] = newPost;
+
+
+    return {
+        ...state,
+        posts: newPosts,
+        newQuickPostSearch
+    }
+}
+
 const appState = (state = initialState, action) => {
     let newcomments;
 
@@ -138,6 +184,15 @@ const appState = (state = initialState, action) => {
                 ...state,
                 comments: newcomments
             }
+        case constants.VOTING_COMPLETE:
+            return updatePost(state, action.postId, undefined, undefined, false, action.post);
+
+        case constants.VOTING_ERROR:
+            return updatePost(state, action.postId, action.error, action.errorText, false, undefined);
+
+        case constants.VOTING_LOADING:
+            return updatePost(state, action.postId, undefined, undefined, action.loading, undefined);
+
         default:
             return state
     }

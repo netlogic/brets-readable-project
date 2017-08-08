@@ -106,40 +106,89 @@ export const commentsError = (postId, error, errorText) => ({
     error: error,
     errorText: errorText,
     commentsLoading: false,
-    postId : postId,
+    postId: postId,
 });
 
 export const commentsLoading = (postId, loading) => ({
     type: constants.COMMENTS_LOADING,
     commentsLoading: loading,
-    postId : postId
+    postId: postId
 });
 
 export function fetchComments(postId) {
     return (dispatch) => {
-        dispatch(commentsLoading(postId,true));
-        fetch(buildCmdURL("posts/"+postId+"/comments"), { headers: { 'Authorization': MYTOKEN } })
+        dispatch(commentsLoading(postId, true));
+        fetch(buildCmdURL("posts/" + postId + "/comments"), { headers: { 'Authorization': MYTOKEN } })
             .then((response) => {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
-                dispatch(commentsLoading(postId,false));
+                dispatch(commentsLoading(postId, false));
                 return response;
             })
             .then((response) => response.json())
             .then((comments) => {
-                dispatch(commentsReceived(postId,comments));
+                dispatch(commentsReceived(postId, comments));
             })
-            .catch((e) => dispatch(commentsError(postId,true, e.toString())));
+            .catch((e) => dispatch(commentsError(postId, true, e.toString())));
     };
 }
 
 export const setSortField = (sortField) => ({
-    type : constants.SET_SORT_FIELD,
-    field : sortField,
+    type: constants.SET_SORT_FIELD,
+    field: sortField,
 });
 
 export const setSortAscending = (val) => ({
-    type : constants.SET_SORT_ASCENDING,
-    val : val,
+    type: constants.SET_SORT_ASCENDING,
+    val: val,
 });
+
+
+export const votingComplete = (postId, upvote, post) => ({
+    type: constants.VOTING_COMPLETE,
+    postId: postId,
+    upvote: upvote,
+    post,
+});
+
+export const votingError = (postId, error, errorText) => ({
+    type: constants.VOTING_ERROR,
+    error: error,
+    errorText: errorText,
+    loading: false,
+    postId: postId,
+});
+
+export const voting = (postId, loading) => ({
+    type: constants.VOTING_LOADING,
+    loading: loading,
+    postId: postId
+});
+
+export function vote(postId, upvote) {
+    return (dispatch) => {
+        dispatch(voting(postId, true));
+        fetch(buildCmdURL("posts/" + postId),
+            {
+                headers: {
+                    'Authorization': MYTOKEN,
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                body: JSON.stringify({ option : upvote ? "upVote" : "downVote" } )
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(voting(postId, false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((post) => {
+                dispatch(votingComplete(postId, upvote, post));
+            })
+            .catch((e) => dispatch(votingError(postId, true, e.toString())));
+    };
+}
