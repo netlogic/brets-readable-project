@@ -20,7 +20,7 @@ class CategoryBar extends Component {
 
         if (categories) {
             categories = categories.slice();
-            categories.push({ name: "ALL" });
+            categories.push({ name: "all" });
         }
 
         return (
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     categoryTextSelected: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'blue',
+        color: 'black',
         backgroundColor : 'lightgray',
         //textDecoration: 'underline',
         marginRight: 10,

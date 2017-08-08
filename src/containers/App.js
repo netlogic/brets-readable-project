@@ -13,6 +13,7 @@ import { Link, browserHistory } from 'react-router'
 import { updateTime } from '../actions'
 
 import CategoryBar from '../components/CategoryBar'
+import SortBar from '../components/SortBar'
 import Posts from '../components/Posts'
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
           <Text style={styles.headerLine2}> - (An udacity project by BDS)</Text>
         </View>
         <CategoryBar key={keyVal+"catbar"} activeCategory={this.props.params.type}/>
+        <SortBar/>
         <Posts  key={keyVal+"posts"}  activeCategory={this.props.params.type}/>
       </View>
     );

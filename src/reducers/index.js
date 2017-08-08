@@ -10,7 +10,7 @@ import * as constants from '../constants'
 const initialErrorState = null;
 
 
-const errorMessage = (state = initialState, action) => {
+const errorMessage = (state = initialErrorState, action) => {
     const { type, error } = action
 
     if (type === constants.RESET_ERROR_MESSAGE) {
@@ -22,11 +22,31 @@ const errorMessage = (state = initialState, action) => {
     return state
 }
 
+const initialSortState = {
+    sortField: 'timestamp',
+    ascending: false
+}
 
+const sorting = (state = initialSortState, action) => {
+    switch (action.type) {
+        case constants.SET_SORT_FIELD:
+            return {
+                ...state,
+                sortField: action.field
+            }
+        case constants.SET_SORT_ASCENDING:
+            return {
+                ...state,
+                ascending: action.val
+            }
+        default:
+            return state;
+    }
+}
 
 const initialState = {
     time: (new Date()),
-    comments : {},
+    comments: {},
 }
 
 const appState = (state = initialState, action) => {
@@ -61,9 +81,9 @@ const appState = (state = initialState, action) => {
             // create a hash map of posts
             // so we can quickly retrieve
             // on detail page
-            for ( let post of action.posts ) {
+            for (let post of action.posts) {
                 quickPostSearch[post.id] = post;
-            } 
+            }
             return {
                 ...state,
                 posts: action.posts,
@@ -84,39 +104,39 @@ const appState = (state = initialState, action) => {
         case constants.COMMENTS_RECEIVED:
             newcomments = {
                 ...state.comments,
-                [action.postId] : {
-                    loading : false,
-                    errorLoading : false,
-                    comments : action.comments,
+                [action.postId]: {
+                    loading: false,
+                    errorLoading: false,
+                    comments: action.comments,
                 }
             }
             return {
                 ...state,
-                comments : newcomments
+                comments: newcomments
             }
         case constants.COMMENTS_ERROR:
             newcomments = {
                 ...state.comments,
-                [action.postId] : {
-                    loading : false,
-                    errorLoading : action.error,
-                    errorText : action.errorText,
+                [action.postId]: {
+                    loading: false,
+                    errorLoading: action.error,
+                    errorText: action.errorText,
                 }
             }
             return {
                 ...state,
-                comments : newcomments
+                comments: newcomments
             }
         case constants.COMMENTS_LOADING:
             newcomments = {
                 ...state.comments,
-                [action.postId] : {
-                    loading : action.loading,
+                [action.postId]: {
+                    loading: action.loading,
                 }
             }
             return {
                 ...state,
-                comments : newcomments
+                comments: newcomments
             }
         default:
             return state
@@ -126,6 +146,7 @@ const appState = (state = initialState, action) => {
 export default combineReducers({
     appState,
     errorMessage,
+    sorting,
     routing: routerReducer
 }
 );

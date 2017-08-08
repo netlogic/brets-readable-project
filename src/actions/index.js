@@ -133,3 +133,13 @@ export function fetchComments(postId) {
             .catch((e) => dispatch(commentsError(postId,true, e.toString())));
     };
 }
+
+export const setSortField = (sortField) => ({
+    type : constants.SET_SORT_FIELD,
+    field : sortField,
+});
+
+export const setSortAscending = (val) => ({
+    type : constants.SET_SORT_ASCENDING,
+    val : val,
+});
