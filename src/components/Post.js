@@ -68,6 +68,11 @@ class Post extends Component {
                     }}>
                         <Text style={{ fontSize: 20, margin: 5 }}>&#128077;</Text>
                     </TouchableHighlight>
+                    <TouchableHighlight onPress={() => {
+                        me.props.deletePost(post.id);
+                    }}>
+                        <Text style={{ fontSize: 20, margin: 5 }}>&#128465;</Text>
+                    </TouchableHighlight>
                 </View>
                 {this.renderComments()}
             </View>
