@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
+import { push , goBack} from 'react-router-redux'
 import { fetchComments, vote, deletePost, clearPostDetail , clearAddPost} from '../actions'
 import Popup from 'react-popup';
 
@@ -16,7 +16,7 @@ function keepShort(a, len) {
 const Margin = () => {
     return <View style={{
         height: 1, width: 290,
-        alignSelf: 'flexStart',
+        alignSelf: 'flex-start',
         marginBottom: 15, marginTop: 15, marginRight: 15, backgroundColor: 'lightgray'
     }} />;
 }
@@ -50,9 +50,9 @@ class Post extends Component {
         )
     }
 
-    showDetailPost(postId) {
+    showDetailPost(post) {
         this.props.clearPostDetail();
-        this.props.changeRoute("/postDetail/" + postId);
+        this.props.changeRoute("/"+post.category+"/" + post.id);
     }
 
     render() {
@@ -68,7 +68,7 @@ class Post extends Component {
             <View>
                 {!detailed && (
                     <TouchableHighlight key={post.id} onPress={() => {
-                        me.showDetailPost(post.id);
+                        me.showDetailPost(post);
                     }}>
                         <Text style={styles.categoryText}>{keepShort(post.title,  50)}</Text>
                     </TouchableHighlight>
@@ -84,7 +84,7 @@ class Post extends Component {
                 </View>
                 <View style={styles.infoLine}>
                     <TouchableHighlight onPress={() => {
-                        me.props.changeRoute("/category/" + post.category);
+                        me.props.changeRoute("/" + post.category);
                     }}>
                         <Text style={styles.infoLineText}>{'Category: ' + post.category}</Text>
                     </TouchableHighlight>
@@ -116,7 +116,7 @@ class Post extends Component {
                 {!this.props.detailed && (
                         [
                         <TouchableHighlight key="showDetailsBottom" onPress={() => {
-                            me.showDetailPost(post.id);
+                            me.showDetailPost(post);
                         }}>
                             <Text style={styles.seeAllDetailsText}>See all details</Text>
                         </TouchableHighlight>,
@@ -151,6 +151,9 @@ class Post extends Component {
             });
         });
         Popup.plugins().deletePost(function (value) {
+            if ( me.props.detailed ) {
+                me.props.goBack();
+            }
             me.props.deletePost(post.id);
         });
     }
@@ -173,6 +176,7 @@ const mapStateToProps = (state, ownProps) => {
 
 function mapDispatchToProps(dispatch) {
     return {
+        goBack: () => dispatch(goBack()),
         changeRoute: (url) => dispatch(push(url)),
         fetchComments: (postId) => dispatch(fetchComments(postId)),
         vote: (postId, upvote) => dispatch(vote(postId, upvote)),

@@ -9,10 +9,10 @@ import PathNotFound from './containers/PathNotFound'
 
 const Routes =  ({history}) => (
     <Router history={history}>
-        <Route path="/addPost" component={AddPost} />
+        <Route path="/addPost" component={AddPost} />        
         <Route path="/editPost/:postId" component={EditPost} />
-        <Route path="/category/:type" component={App} />
-        <Route path="/postDetail/:postId" component={PostDetails} />
+        <Route path="/:category/:postId" component={PostDetails}/>
+        <Route path="/:category" component={App}/>
         <Route path="/" component={App} />
         <Route path="*" component={PathNotFound} />
     </Router>

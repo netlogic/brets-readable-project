@@ -32,9 +32,9 @@ class App extends Component {
             <Text style={styles.addPostText} >ADD POST</Text>
           </TouchableHighlight>
         </View>
-        <CategoryBar key={keyVal+"catbar"} activeCategory={this.props.params.type}/>
+        <CategoryBar key={keyVal+"catbar"} activeCategory={this.props.params.category}/>
         <SortBar/>
-        <Posts  key={keyVal+"posts"}  activeCategory={this.props.params.type}/>
+        <Posts  key={keyVal+"posts"}  activeCategory={this.props.params.category}/>
       </View>
     );
   }

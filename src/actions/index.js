@@ -6,7 +6,7 @@ import * as constants from '../constants';
 import uuid from 'uuid/v4';
 
 const HOST_URL = "http://localhost:5001/";
-const MYTOKEN = Math.random() * 100;
+const MYTOKEN = "55xxxaaaCasdas";
 
 export function updateTime(newtime) {
     return {

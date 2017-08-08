@@ -30,6 +30,8 @@ class PostDetails extends Component {
             msg = "No post id specified";
         } else if (!this.props.postDetail) {
             msg = "Post loading...";
+        } else if ( this.props.postDetail.deleted === undefined || this.props.postDetail.deleted ) {
+            msg = "Post not found (perhaps deleted, please check id)"
         }
 
         if (msg) {
@@ -39,7 +41,7 @@ class PostDetails extends Component {
                 }}>
                     <Text style={styles.headerLine1}>{'<BACK'}</Text>
                 </TouchableHighlight>
-                <Text>{msg}</Text>
+                <Text style={{marginLeft:50}}>{msg}</Text>
             </View>);
         }
 

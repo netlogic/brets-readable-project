@@ -32,7 +32,7 @@ class CategoryBar extends Component {
                                 if (category.name === 'all') {
                                     me.props.changeRoute("/");
                                 } else {
-                                    me.props.changeRoute("/category/" + category.name);
+                                    me.props.changeRoute("/" + category.name);
                                 }
                             }}>
                                 <Text style={
