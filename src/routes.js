@@ -12,7 +12,7 @@ const Routes =  ({history}) => (
     <Router history={history}>
         <Route path="/silly" component={Posts} />
         <Route path="/category/:type" component={App} />
-        <Route path="/categories" component={Categories} />
+        <Route path="/postDetail/:postId" component={PostDetails} />
         <Route path="/" component={App} />
         <Route path="*" component={PathNotFound} />
     </Router>

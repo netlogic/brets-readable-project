@@ -235,3 +235,45 @@ export function deletePost(postId) {
             .catch((e) => dispatch(deletingPostError(postId, true, e.toString())));
     };
 }
+
+export const postDetailReceived = post => ({
+    type: constants.POST_DETAIL_RECEIVED,
+    postDetail: post,
+    loadingPostDetail : false,
+    loadingPostDetailError : undefined
+});
+
+export const postDetailError = (error, errorText) => ({
+    type: constants.POST_DETAIL_ERROR,
+    loadingPostDetailError: errorText,
+    loadingPostDetail: false
+});
+
+export const postDetailLoading = (loading) => ({
+    type: constants.POST_DETAIL_LOADING,
+    loadingPostDetail: loading,
+    loadingPostDetailError : undefined
+});
+
+export function fetchPostDetail(postId) {
+    return (dispatch) => {
+        dispatch(postDetailLoading(true));
+        fetch(buildCmdURL("posts/" + postId ), { headers: { 'Authorization': MYTOKEN } })
+            .then((response) => {
+                if (!response.ok || response.status === 404 ) {
+                    throw Error(response.statusText);
+                }
+                dispatch(postDetailLoading(false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((post) => {
+                dispatch(postDetailReceived(post));
+            })
+            .catch((e) => dispatch(postDetailError(true, e.toString())));
+    };
+}
+
+export const clearPostDetail = () => ({
+    type: constants.POST_DETAIL_CLEAR,
+});

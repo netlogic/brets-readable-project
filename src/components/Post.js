@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { fetchComments, vote, deletePost } from '../actions'
+import { fetchComments, vote, deletePost, clearPostDetail } from '../actions'
 import Popup from 'react-popup';
 
 function keepShort(a, len) {
@@ -14,7 +14,6 @@ function keepShort(a, len) {
     return a;
 }
 
-
 const Margin = () => {
     return <View style={{
         height: 1, width: 290,
@@ -22,8 +21,6 @@ const Margin = () => {
         marginBottom: 15, marginTop: 15, marginRight: 15, backgroundColor: 'lightgray'
     }} />;
 }
-
-
 
 class Post extends Component {
 
@@ -49,18 +46,19 @@ class Post extends Component {
         }
         return (<View key="comments">
             <Text style={styles.commentHeaderText}>{'# comments: ' + this.props.comments.length}</Text>
-            {commentDisplay}            
+            {commentDisplay}
         </View>
         )
     }
 
     showDetailPost(postId) {
+        this.props.clearPostDetail();
         this.props.changeRoute("/postDetail/" + postId);
     }
 
     render() {
         let me = this;
-        let { post } = me.props;
+        let { post , detailed } = me.props;
 
         console.log(post);
 
@@ -69,13 +67,18 @@ class Post extends Component {
 
         return (
             <View>
-                <TouchableHighlight key={post.id} onPress={() => {
-                    me.showDetailPost( post.id );
-                }}>
-                    <Text style={styles.categoryText}>{keepShort(post.title, 50)}</Text>
-                </TouchableHighlight>
-                <Text numberOfLines={1} style={styles.bodyLine}>{keepShort(post.body, 60)}</Text>
-
+                {!detailed && (
+                    <TouchableHighlight key={post.id} onPress={() => {
+                        me.showDetailPost(post.id);
+                    }}>
+                        <Text style={styles.categoryText}>{keepShort(post.title,  50)}</Text>
+                    </TouchableHighlight>
+                )}
+                {detailed && (
+                    <Text style={styles.textDetailed}>{post.title}</Text>
+                ) 
+                }
+                <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
                 <View style={styles.infoLine}>
                     <TouchableHighlight onPress={() => {
                         me.props.changeRoute("/category/" + post.category);
@@ -102,12 +105,15 @@ class Post extends Component {
                     </TouchableHighlight>
                 </View>
                 {this.renderComments(true)}
-                 <TouchableHighlight onPress={() => {
-                    me.showDetailPost( post.id );
-                }}>
-                    <Text style={styles.seeAllDetailsText}>See all details</Text>
-                </TouchableHighlight>
-                <Margin />
+                {!this.props.detailed && (
+                        [
+                        <TouchableHighlight key="showDetailsBottom" onPress={() => {
+                            me.showDetailPost(post.id);
+                        }}>
+                            <Text style={styles.seeAllDetailsText}>See all details</Text>
+                        </TouchableHighlight>,
+                         <Margin key="marbot"/> ]
+                )}
             </View >
         );
     }
@@ -164,6 +170,7 @@ function mapDispatchToProps(dispatch) {
         fetchComments: (postId) => dispatch(fetchComments(postId)),
         vote: (postId, upvote) => dispatch(vote(postId, upvote)),
         deletePost: (postId) => dispatch(deletePost(postId)),
+        clearPostDetail: () => dispatch(clearPostDetail()),
         dispatch,
     };
 }
@@ -192,6 +199,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'blue',
         //textDecoration: 'underline',
+        marginRight: 10,
+    },
+    textDetailed : {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333333',
         marginRight: 10,
     },
     infoLineText: {
@@ -224,12 +237,12 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginLeft: 30,
     },
-    seeAllDetailsText : {
-        fontSize : 10,
-        fontWeight : 'bold',
-        color : 'blue',
+    seeAllDetailsText: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        color: 'blue',
         marginLeft: 45,
-        marginTop : 10
+        marginTop: 10
     }
 }
 );

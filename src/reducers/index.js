@@ -66,12 +66,19 @@ function updatePost(state, postId, error, errorText, loading, post) {
     // make a new post object 
     let newPost;
 
+    let postDetail = state.postDetail;
+    let setNewPostDetail = false;
+
     if (post) {
         newPost = {
             ...post,
             votingError: error,
             votingErrorText: errorText,
             voting: loading
+        }
+        if (postDetail && postDetail.id === post.id) {
+            postDetail = newPost;
+            setNewPostDetail = true;
         }
     } else {
         newPost = {
@@ -87,11 +94,20 @@ function updatePost(state, postId, error, errorText, loading, post) {
     let newQuickPostSearch = Object.assign({}, state.quickPostSearch);
     newQuickPostSearch[newPost.id] = newPost;
 
+    if (setNewPostDetail) {
+        return {
+            ...state,
+            posts: newPosts,
+            quickPostSearch: newQuickPostSearch,
+            postDetail
+        }
+    } else {
 
-    return {
-        ...state,
-        posts: newPosts,
-        newQuickPostSearch
+        return {
+            ...state,
+            posts: newPosts,
+            quickPostSearch: newQuickPostSearch
+        }
     }
 }
 
@@ -112,15 +128,15 @@ function deletingPost(state, postId, error, errorText, loading, post) {
 
     // make a new post object 
     let newPost;
-      let newQuickPostSearch = Object.assign({}, state.quickPostSearch);
-       
+    let newQuickPostSearch = Object.assign({}, state.quickPostSearch);
+
 
     if (post) {
         // we need to remove this post from the system
         // do to new posts
         delete newQuickPostSearch[postId]; // remove the post property
     } else {
-        
+
 
         newPost = {
             ...oldPost,
@@ -177,6 +193,34 @@ const appState = (state = initialState, action) => {
                 ...state,
                 posts: action.posts,
                 quickPostSearch
+            }
+        case constants.POST_DETAIL_CLEAR:
+            return {
+                ...state,
+                postDetail: undefined,
+                loadingPostDetail: false,
+                loadingPostDetailError: undefined
+            }
+        case constants.POST_DETAIL_RECEIVED:
+            return {
+                ...state,
+                postDetail: action.postDetail,
+                loadingPostDetail: action.loadingPostDetail,
+                loadingPostDetailError: action.loadingPostDetailError
+            }
+        case constants.POST_DETAIL_ERROR:
+            return {
+                ...state,
+                postDetail: action.postDetail,
+                loadingPostDetail: action.loadingPostDetail,
+                loadingPostDetailError: action.loadingPostDetailError
+            }
+        case constants.POST_DETAIL_LOADING:
+            return {
+                ...state,
+                postDetail: action.postDetail,
+                loadingPostDetail: action.loadingPostDetail,
+                loadingPostDetailError: action.loadingPostDetailError
             }
         case constants.CATEGORIES_LOADING:
             return {
@@ -237,11 +281,11 @@ const appState = (state = initialState, action) => {
             return updatePost(state, action.postId, undefined, undefined, action.loading, undefined);
 
         case constants.DELETE_POST_COMPLETE:
-            return deletingPost( state, action.postId, undefined, undefined, false, action.postId );
+            return deletingPost(state, action.postId, undefined, undefined, false, action.postId);
 
-        case  constants.DELETE_POST_ERROR:
-            return deletingPost( state, action.postId,  action.error, action.errorText, false, undefined);
-        case  constants.DELETING_POST:
+        case constants.DELETE_POST_ERROR:
+            return deletingPost(state, action.postId, action.error, action.errorText, false, undefined);
+        case constants.DELETING_POST:
             return deletingPost(state, action.postId, undefined, undefined, action.loading, undefined);
         default:
             return state
