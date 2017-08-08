@@ -15,17 +15,32 @@ class CategoryBar extends Component {
 
     render() {
         let me = this;
+        let categories = this.props.categories;
+        let activeCategory = this.props.activeCategory || "ALL";
+
+        if (categories) {
+            categories = categories.slice();
+            categories.push({ name: "ALL" });
+        }
 
         return (
             <View style={styles.container}>
-                <Text>Category Quick Select:</Text>
-                {this.props.categories && (
-                    this.props.categories.map((category) => {
+                <Text style={styles.displayPosts}>{'Display Posts\nBy Categories:'}</Text>
+                {categories && (
+                    categories.map((category) => {
                         return (
-                            <TouchableHighlight  key={category.name} onPress={() => {
-                                me.props.changeRoute("/category/" + category.name);
+                            <TouchableHighlight key={category.name} onPress={() => {
+                                if (category.name === 'ALL') {
+                                    me.props.changeRoute("/");
+                                } else {
+                                    me.props.changeRoute("/category/" + category.name);
+                                }
                             }}>
-                                <Text style={styles.categoryText}>{' ' + category.name + ' '}</Text>
+                                <Text style={
+                                    activeCategory === category.name ?
+                                        styles.categoryTextSelected :
+                                        styles.categoryText}>
+                                    {' ' + category.name + ' '}</Text>
                             </TouchableHighlight>
                         );
                     }
@@ -69,16 +84,29 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
     categoryText: {
         fontSize: 20,
+        fontWeight: 'normal',
+        color: 'gray',
+        //textDecoration: 'underline',
+        marginRight: 10,
+    },
+    categoryTextSelected: {
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'blue',
-         //textDecoration: 'underline',
-         marginRight : 10,
+        backgroundColor : 'lightgray',
+        //textDecoration: 'underline',
+        marginRight: 10,
+    },
+    displayPosts: {
+        fontSize: 12,
+        fontWeight: 'lighter',
+        color: '#333333',
+        marginRight: 15,
     }
 }
 );

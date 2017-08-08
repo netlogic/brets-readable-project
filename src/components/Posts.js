@@ -14,9 +14,14 @@ class Posts extends Component {
 
     render() {
         let me = this;
+        let { activeCategory } = this.props ;
 
         // display all posts not deleted.
         let displayPosts =me.props.posts ? me.props.posts.filter( (post) => !post.deleted  ) : null;
+
+        if ( displayPosts && activeCategory ) {
+            displayPosts = displayPosts.filter ( post => post.category===activeCategory)
+        }
 
         return (
             <View style={styles.container}>

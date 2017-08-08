@@ -18,15 +18,16 @@ import Posts from '../components/Posts'
 class App extends Component {
   render() {
     let me = this;
-
+    let keyVal = this.props.params.type || "default"
+    
     return (
       <View style={styles.container}>
         <View style={styles.appheader}>
           <Text style={styles.headerLine1}>Readable</Text>
-          <Text style={styles.headerLine1}>An udacity project by BDS</Text>
+          <Text style={styles.headerLine2}> - (An udacity project by BDS)</Text>
         </View>
-        <CategoryBar />
-        <Posts/>
+        <CategoryBar key={keyVal+"catbar"} activeCategory={this.props.params.type}/>
+        <Posts  key={keyVal+"posts"}  activeCategory={this.props.params.type}/>
       </View>
     );
   }
@@ -52,31 +53,28 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'flex-start',
+    backgroundColor: '#FFFFFF',
   },
   appheader: {
     width: '100%',
-    height: 80,
     backgroundColor: '#f0f0f0',
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
 
   },
   headerLine1: {
-    alignSelf: 'flex-start',
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333333',
-    marginTop: 10,
     marginLeft: 15,
-
+    marginTop : 15,
+    marginBottom : 15,
   },
   headerLine2: {
-    alignSelf: 'flex-start',
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: 'normal',
     color: '#333333',
     marginLeft: 15,
