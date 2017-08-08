@@ -295,22 +295,39 @@ export const addedPost = post => ({
 });
 
 
-export function addPost(title, body, author, category) {
+export function addPost(id, title, bodyText, author, category) {
     return (dispatch) => {
         dispatch(addingPost(true));
-        fetch(buildCmdURL("posts"), {
-            headers: {
-                'Authorization': MYTOKEN,
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                title: title, body: body,
+        let method;
+        let cmd ;
+        let options;
+        let body;
+
+        if ( id ) {
+            method = 'PUT';
+            cmd = "posts/" + id;
+            body = JSON.stringify({
+                title: title, body: bodyText,
+            })
+        } else {
+            method = 'POST';
+            cmd = "posts";
+            body = JSON.stringify({
+                title: title, body: bodyText,
                 timestamp: Date.now(),
                 author: author, 
                 category: category,
                 id : uuid()
             })
+        }
+
+        fetch(buildCmdURL(cmd), {
+            headers: {
+                'Authorization': MYTOKEN,
+                'Content-Type': 'application/json',
+            },
+            method: method,
+            body: body,
         })
             .then((response) => {
                 if (!response.ok ) {

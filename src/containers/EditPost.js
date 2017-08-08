@@ -14,13 +14,43 @@ import Post from '../components/Post'
 import AddCategoryBar from '../components/AddCategoryBar'
 import Popup from 'react-popup';
 
-import { setAddPostTitle, setAddPostBody, setAddPostAuthor, setAddPostCategory, addPost } from '../actions'
+import { setAddPostTitle, setAddPostBody, setAddPostAuthor, 
+            setAddPostCategory, fetchPostDetail, addPost } from '../actions'
 
 class AddPost extends Component {
+
+    componentDidMount() {
+        if (this.props.params.postId) {
+            this.props.fetchPostDetail(this.props.params.postId);
+        }
+    }
 
     render() {
         let me = this;
         let props = me.props;
+        let msg;
+        let postId = props.params.postId;
+
+        if (this.props.loadingPostDetail) {
+            msg = "Post loading..."
+        } else if (this.props.loadingPostDetailError) {
+            msg = this.props.loadingPostDetailError;
+        } else if (!postId) {
+            msg = "No post id specified";
+        } else if (!this.props.postDetail) {
+            msg = "Post loading...";
+        }
+
+        if (msg) {
+            return (<View style={styles.appheader}>
+                <TouchableHighlight onPress={() => {
+                    me.props.goBack();
+                }}>
+                    <Text style={styles.headerLine1}>{'<BACK'}</Text>
+                </TouchableHighlight>
+                <Text>{msg}</Text>
+            </View>);
+        }
 
         return (
             <View style={styles.container}>
@@ -31,35 +61,28 @@ class AddPost extends Component {
                     }}>
                         <Text style={styles.headerLine1}>{'<BACK    '}</Text>
                     </TouchableHighlight>
-                    <Text style={styles.headerLine1}>Add Post</Text>
-                    <TouchableHighlight style={{ marginLeft: 50 }} onPress={()=>{
-                        props.addPost( null, props.title, props.body, props.author, props.category );
+                    <Text style={styles.headerLine1}>Edit Post</Text>
+                    <TouchableHighlight style={{ marginLeft: 50 }} onPress={() => {
+                        props.addPost(postId, props.title, props.body);
                         me.props.goBack();
                     }}>
-                        <Text style={props.valid ? styles.addBtnActive :  styles.addBtn} >ADD!</Text>
+                        <Text style={props.valid ? styles.addBtnActive : styles.addBtn} >DONE!</Text>
                     </TouchableHighlight>
                 </View>
                 <View style={{ marginLeft: 15 }}>
-                    <Text style={styles.headerLine2}>Please enter all information below and press Add!</Text>
+                    <Text style={styles.headerLine2}>Please edit any information below and press Add!</Text>
                     <View style={styles.inputRow}>
                         <Text style={styles.inputTitle}>Title:</Text>
-                        <TextInput  style={styles.inputText}  placeholder='title' onChange={(event) => {
+                        <TextInput style={styles.inputText} placeholder='title' onChange={(event) => {
                             me.props.setAddPostTitle(event.target.value);
                         }} value={props.title} />
                     </View>
                     <View style={styles.inputRow}>
                         <Text style={styles.inputTitle}>Body:</Text>
-                        <TextInput  style={styles.inputText}  placeholder='body' onChange={(event) => {
+                        <TextInput style={styles.inputText} placeholder='body' onChange={(event) => {
                             me.props.setAddPostBody(event.target.value);
                         }} value={props.body} />
                     </View>
-                    <View style={styles.inputRow}>
-                        <Text style={styles.inputTitle}>Author:</Text>
-                        <TextInput style={styles.inputText} placeholder='author' onChange={(event) => {
-                            me.props.setAddPostAuthor(event.target.value);
-                        }} value={props.author} />
-                    </View>
-                    <AddCategoryBar/>
                 </View>
             </View>
         );
@@ -71,7 +94,10 @@ const mapStateToProps = (state, ownProps) => ({
     author: state.addPost.author,
     category: state.addPost.category,
     body: state.addPost.body,
-    valid : state.addPost.valid,
+    valid: state.addPost.valid,
+    postDetail: state.appState.postDetail,
+    loadingPostDetail: state.appState.postDetailLoading,
+    loadingPostDetailError: state.appState.postDetailErrorLoading,
 })
 
 function mapDispatchToProps(dispatch) {
@@ -81,7 +107,8 @@ function mapDispatchToProps(dispatch) {
         setAddPostBody: (val) => dispatch(setAddPostBody(val)),
         setAddPostAuthor: (val) => dispatch(setAddPostAuthor(val)),
         setAddPostCategory: (val) => dispatch(setAddPostCategory(val)),
-        addPost : (id,title,body,author,category) =>dispatch(addPost(id,title,body,author,category)),
+        fetchPostDetail: (postId) => dispatch(fetchPostDetail(postId)),
+        addPost: (id,title, body, author, category) => dispatch(addPost(id,title, body, author, category)),
         dispatch,
 
     };
@@ -97,7 +124,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundColor: '#FFFFFF',
-        width : '100%',
+        width: '100%',
     },
     appheader: {
         width: '100%',
@@ -119,8 +146,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
     },
-    addBtnActive : {
-       fontSize: 16,
+    addBtnActive: {
+        fontSize: 16,
         backgroundColor: 'lightgray',
         color: 'blue',
         width: 120,
@@ -130,8 +157,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
     },
-    addBtn : {
-       fontSize: 16,
+    addBtn: {
+        fontSize: 16,
         backgroundColor: 'lightgray',
         color: 'gray',
         width: 120,
@@ -162,7 +189,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop: 15,
-        width : 600,
+        width: 600,
     },
     inputTitle: {
         fontSize: 18,
@@ -174,7 +201,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#333333',
         fontWeight: 'normal',
-        width:  600,
+        width: 600,
         height: 40,
         borderRadius: 6,
         borderColor: 'black',

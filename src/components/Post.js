@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { fetchComments, vote, deletePost, clearPostDetail } from '../actions'
+import { fetchComments, vote, deletePost, clearPostDetail , clearAddPost} from '../actions'
 import Popup from 'react-popup';
 
 function keepShort(a, len) {
-    if (a.length > len) {
+    if ( a && (a.length > len)) {
         a = a.substr(0, len - 3);
         return a + "...";
     }
@@ -107,6 +107,11 @@ class Post extends Component {
                     }}>
                         <Text style={{ fontSize: 20, margin: 5 }}>&#128465;</Text>
                     </TouchableHighlight>
+                    <TouchableHighlight onPress={() => {
+                        me.handleEditPost(post);
+                    }}>
+                        <Text style={{ fontSize: 20, margin: 5 }}>&#x1F4DD;</Text>
+                    </TouchableHighlight>
                 </View>
                 {this.renderComments(true)}
                 {!this.props.detailed && (
@@ -122,6 +127,10 @@ class Post extends Component {
         );
     }
 
+    handleEditPost(post) {
+        this.props.clearAddPost();
+        this.props.changeRoute( "/editPost/" + post.id );
+    }
 
     handleDelete(post) {
         let me = this;
@@ -175,6 +184,7 @@ function mapDispatchToProps(dispatch) {
         vote: (postId, upvote) => dispatch(vote(postId, upvote)),
         deletePost: (postId) => dispatch(deletePost(postId)),
         clearPostDetail: () => dispatch(clearPostDetail()),
+        clearAddPost : () => dispatch(clearAddPost()),
         dispatch,
     };
 }
