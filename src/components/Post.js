@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push, goBack } from 'react-router-redux'
-import { fetchComments, vote, deletePost, clearPostDetail, clearAddPost } from '../actions'
+import { fetchComments, voteComment, vote, deletePost, clearPostDetail, clearAddPost } from '../actions'
 import Popup from 'react-popup';
 
 function keepShort(a, len) {
@@ -27,7 +27,7 @@ class Post extends Component {
         this.props.fetchComments(this.props.post.id);
     }
 
-    renderComments(all) {
+    renderComments(all,postId) {
         let me = this;
 
         if (me.props.loading) {
@@ -39,10 +39,13 @@ class Post extends Component {
         }
         let commentDisplay;
 
+
+
         if (me.props.comments.length > 0) {
+            let comments = me.props.comments.sort( (a,b)=> a.timestamp < b.timestamp );
             if (all) {
 
-                commentDisplay = me.props.comments.map((c) => {
+                commentDisplay = comments.map((c) => {
                     let timestamp = new Date(parseInt(c.timestamp, 10));
                     let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US")
 
@@ -51,13 +54,13 @@ class Post extends Component {
                         <View style={styles.infoLine}>
                             <Text style={styles.infoLineTime}>{displayTime}</Text>
                             <TouchableHighlight onPress={() => {
-                                //me.props.vote(post.id, false);
+                                me.props.voteComment(postId,c.id, false);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteDown">&#128078;</span></Text>
                             </TouchableHighlight>
                             <Text>{c.voteScore}</Text>
                             <TouchableHighlight onPress={() => {
-                               // me.props.vote(post.id, true);
+                                me.props.voteComment(postId,c.id, true );
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
                             </TouchableHighlight>
@@ -80,7 +83,7 @@ class Post extends Component {
                 // show a preview comment
                 // for the first comment lets display something
                 console.log(this.props.comments[0]);
-                let comment = this.props.comments[0];
+                let comment = comments[0];
                 commentDisplay = <Text style={styles.shortComment}>{comment.author + " - said - " + keepShort(comment.body, 20)}</Text>
             }
         }
@@ -161,7 +164,7 @@ class Post extends Component {
                         <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
                     </TouchableHighlight>
                 </View>
-                {this.renderComments(detailed)}
+                {this.renderComments(detailed, post.id)}
                 {!this.props.detailed && (
                     [
                         <TouchableHighlight key="showDetailsBottom" onPress={() => {
@@ -228,6 +231,7 @@ function mapDispatchToProps(dispatch) {
         changeRoute: (url) => dispatch(push(url)),
         fetchComments: (postId) => dispatch(fetchComments(postId)),
         vote: (postId, upvote) => dispatch(vote(postId, upvote)),
+        voteComment: (postId, commentId, upvote) => dispatch(voteComment(postId, commentId, upvote)),
         deletePost: (postId) => dispatch(deletePost(postId)),
         clearPostDetail: () => dispatch(clearPostDetail()),
         clearAddPost: () => dispatch(clearAddPost()),

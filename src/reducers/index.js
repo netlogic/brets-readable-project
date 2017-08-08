@@ -153,6 +153,22 @@ function deletingPost(state, postId, error, errorText, loading, post) {
     }
 }
 
+function buildNewCommentArray(commentsHolder, comment) {
+    if (!commentsHolder) {
+        commentsHolder = {};
+    }
+    let comments = commentsHolder.comments;
+    if ( !comments ) {
+        comments = [];
+    }
+    comments = comments.filter((a) => {
+        console.log(a,comment);
+        return ( !a.deleted  && (a.id !== comment.id) );
+    });
+    comments.push( comment );
+    return comments;
+}
+
 const appState = (state = initialState, action) => {
     let newcomments;
 
@@ -239,7 +255,23 @@ const appState = (state = initialState, action) => {
                 [action.postId]: {
                     loading: false,
                     errorLoading: false,
-                    comments: action.comments ? action.comments.filter( (a)=>!a.deleted ) : [],
+                    comments: action.comments ? action.comments.filter((a) => !a.deleted) : [],
+                }
+            }
+            return {
+                ...state,
+                comments: newcomments
+            }
+        case constants.VOTING_COMMENT_COMPLETE:
+            // postId: postId,
+            // upvote: upvote,
+            // comment : comment
+            newcomments = {
+                ...state.comments,
+                [action.comment.parentId]: {
+                    loading: false,
+                    errorLoading: false,
+                    comments: buildNewCommentArray( state.comments ? (state.comments[action.comment.parentId]) : [], action.comment),
                 }
             }
             return {
@@ -377,7 +409,7 @@ const addPost = (state = intialStateAddPost, action) => {
         case constants.POST_DETAIL_RECEIVED:
             return {
                 ...state,
-                oldPostId : action.postDetail.id,
+                oldPostId: action.postDetail.id,
                 title: action.postDetail.title,
                 body: action.postDetail.body,
                 category: action.postDetail.category,

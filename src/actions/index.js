@@ -153,6 +153,15 @@ export const votingComplete = (postId, upvote, post) => ({
     post,
 });
 
+
+
+export const votingCommentComplete = (comment, upvote, postId) => ({
+    type: constants.VOTING_COMMENT_COMPLETE,
+    postId: postId,
+    upvote: upvote,
+    comment : comment
+});
+
 export const votingError = (postId, error, errorText) => ({
     type: constants.VOTING_ERROR,
     error: error,
@@ -191,6 +200,33 @@ export function vote(postId, upvote) {
                 dispatch(votingComplete(postId, upvote, post));
             })
             .catch((e) => dispatch(votingError(postId, true, e.toString())));
+    };
+}
+
+export function voteComment(postId, commentId, upvote) {
+    return (dispatch) => {
+        dispatch(voting(commentId, true));
+        fetch(buildCmdURL("comments/" + commentId),
+            {
+                headers: {
+                    'Authorization': MYTOKEN,
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                body: JSON.stringify({ option: upvote ? "upVote" : "downVote" })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(voting(commentId, false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((comment) => {
+                dispatch(votingCommentComplete(comment, upvote, postId));
+            })
+            .catch((e) => dispatch(votingError(commentId, true, e.toString())));
     };
 }
 
