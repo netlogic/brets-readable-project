@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { View, TouchableHighlight, Text, StyleSheet } from 'react-native-web'
 
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { push } from 'react-router-redux'
 
-import logo from '../logo.svg';
-import './App.css';
+import { push } from 'react-router-redux'
 
 import CategoryBar from '../components/CategoryBar'
 import SortBar from '../components/SortBar'

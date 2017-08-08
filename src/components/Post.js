@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
@@ -62,7 +61,7 @@ class Post extends Component {
 
         console.log(post);
 
-        let timestamp = new Date(parseInt(post.timestamp));
+        let timestamp = new Date(parseInt(post.timestamp,10));
         let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US")
 
         return (
@@ -80,7 +79,7 @@ class Post extends Component {
                 }
                 <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
                 <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-                    <Text>&#x1f464;</Text>
+                    <Text><span role="img" aria-labelledby="author">&#x1f464;</span></Text>
                     <Text style={styles.infoLineText}>{post.author}</Text>
                 </View>
                 <View style={styles.infoLine}>
@@ -94,23 +93,23 @@ class Post extends Component {
                     <TouchableHighlight onPress={() => {
                         me.props.vote(post.id, false);
                     }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}>&#128078;</Text>
+                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="voteDown">&#128078;</span></Text>
                     </TouchableHighlight>
                     <Text>{post.voteScore}</Text>
                     <TouchableHighlight onPress={() => {
                         me.props.vote(post.id, true);
                     }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}>&#128077;</Text>
+                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => {
                         me.handleDelete(post);
                     }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}>&#128465;</Text>
+                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => {
                         me.handleEditPost(post);
                     }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}>&#x1F4DD;</Text>
+                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
                     </TouchableHighlight>
                 </View>
                 {this.renderComments(true)}
@@ -135,11 +134,6 @@ class Post extends Component {
     handleDelete(post) {
         let me = this;
         Popup.registerPlugin('deletePost', function (callback) {
-            let promptValue = null;
-            let promptChange = function (value) {
-                promptValue = value;
-            };
-
             this.create({
                 title: 'Delete Post',
                 content: <Text>{"Are you sure you want to delete post '" + post.title + "'"}</Text>,
@@ -231,7 +225,6 @@ const styles = StyleSheet.create({
         fontWeight: 'lighter',
         color: '#333333',
         marginLeft: 5,
-        marginLeft: 5,
     },
     bodyLine: {
         fontSize: 14,
@@ -242,7 +235,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'lighter',
         color: '#333333',
-        marginLeft: 5,
         marginLeft: 5,
     },
     shortComment: {

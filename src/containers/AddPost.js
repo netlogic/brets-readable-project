@@ -2,15 +2,7 @@ import React, { Component } from 'react';
 import { View, TextInput, TouchableHighlight, Text, StyleSheet } from 'react-native-web'
 
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { goBack } from 'react-router-redux'
-
-import logo from '../logo.svg';
-import './App.css';
-
-import { Link, browserHistory } from 'react-router'
-
-import Post from '../components/Post'
 import AddCategoryBar from '../components/AddCategoryBar'
 import Popup from 'react-popup';
 

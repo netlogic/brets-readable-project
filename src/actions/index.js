@@ -291,7 +291,6 @@ export const addedPost = post => ({
     postDetail: post,
     loading: false,
     addingPostDetailError: undefined,
-    loading : false
 });
 
 
@@ -300,7 +299,6 @@ export function addPost(id, title, bodyText, author, category) {
         dispatch(addingPost(true));
         let method;
         let cmd ;
-        let options;
         let body;
 
         if ( id ) {
@@ -347,14 +345,6 @@ export function addPost(id, title, bodyText, author, category) {
 export const clearPostDetail = () => ({
     type: constants.POST_DETAIL_CLEAR,
 });
-
-
-const intialStateAddPost = {
-    title: "",
-    body: "",
-    author: "",
-    category: "redux",
-}
 
 export const setAddPostTitle = title => ({
     type: constants.ADD_POST_TITLE,

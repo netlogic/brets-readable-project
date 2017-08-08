@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableHighlight, Text, StyleSheet } from 'react-native-web'
 
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { goBack } from 'react-router-redux'
-
-import logo from '../logo.svg';
-import './App.css';
-
-import { Link, browserHistory } from 'react-router'
-
 import Post from '../components/Post'
 import Popup from 'react-popup';
 
@@ -49,8 +42,6 @@ class PostDetails extends Component {
                 <Text>{msg}</Text>
             </View>);
         }
-
-        let keyVal = this.props.params.type || "default"
 
         return (
             <View style={styles.container}>

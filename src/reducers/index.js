@@ -1,7 +1,6 @@
 /** reducer for readable
  * 
  */
-import * as ActionTypes from '../actions'
 import { routerReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import * as constants from '../constants'
@@ -222,12 +221,12 @@ const appState = (state = initialState, action) => {
                 loadingPostDetail: action.loadingPostDetail,
                 loadingPostDetailError: action.loadingPostDetailError
             }
-        case constants.CATEGORIES_LOADING:
+        case constants.POSTS_LOADING:
             return {
                 ...state,
                 postsLoading: action.postsLoading,
             }
-        case constants.CATEGORIES_ERROR:
+        case constants.POSTS_ERROR:
             return {
                 ...state,
                 postsError: action.postsError,

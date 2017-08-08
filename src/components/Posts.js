@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
+import { View, Text, StyleSheet } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { fetchPosts } from '../actions'
