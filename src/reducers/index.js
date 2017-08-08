@@ -239,7 +239,7 @@ const appState = (state = initialState, action) => {
                 [action.postId]: {
                     loading: false,
                     errorLoading: false,
-                    comments: action.comments,
+                    comments: action.comments ? action.comments.filter( (a)=>!a.deleted ) : [],
                 }
             }
             return {

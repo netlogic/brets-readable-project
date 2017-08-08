@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
-import { push , goBack} from 'react-router-redux'
-import { fetchComments, vote, deletePost, clearPostDetail , clearAddPost} from '../actions'
+import { push, goBack } from 'react-router-redux'
+import { fetchComments, vote, deletePost, clearPostDetail, clearAddPost } from '../actions'
 import Popup from 'react-popup';
 
 function keepShort(a, len) {
-    if ( a && (a.length > len)) {
+    if (a && (a.length > len)) {
         a = a.substr(0, len - 3);
         return a + "...";
     }
@@ -28,23 +28,72 @@ class Post extends Component {
     }
 
     renderComments(all) {
-        if (this.props.loading) {
+        let me = this;
+
+        if (me.props.loading) {
             return <Text>loading comments...</Text>
         }
-        if (this.props.errorLoading) {
+        if (me.props.errorLoading) {
             let errormsg = ```error loading comments (${this.props.errorText})```;
             return (<Text>{errormsg}</Text>);
         }
         let commentDisplay;
 
-        if (this.props.comments.length > 0) {
-            // for the first comment lets display something
-            console.log(this.props.comments[0]);
-            let comment = this.props.comments[0];
-            commentDisplay = <Text style={styles.shortComment}>{comment.author + " - said - " + keepShort(comment.body, 20)}</Text>
+        if (me.props.comments.length > 0) {
+            if (all) {
+
+                commentDisplay = me.props.comments.map((c) => {
+                    let timestamp = new Date(parseInt(c.timestamp, 10));
+                    let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US")
+
+                    return (<View key={c.id}>
+                        <Text style={styles.shortComment}>{c.author + " - said - " + c.body}</Text>
+                        <View style={styles.infoLine}>
+                            <Text style={styles.infoLineTime}>{displayTime}</Text>
+                            <TouchableHighlight onPress={() => {
+                                //me.props.vote(post.id, false);
+                            }}>
+                                <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteDown">&#128078;</span></Text>
+                            </TouchableHighlight>
+                            <Text>{c.voteScore}</Text>
+                            <TouchableHighlight onPress={() => {
+                               // me.props.vote(post.id, true);
+                            }}>
+                                <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight onPress={() => {
+                                //me.handleDelete(post);
+                            }}>
+                                <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight onPress={() => {
+                                //me.handleEditPost(post);
+                            }}>
+                                <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
+                    )
+                });
+
+            } else {
+                // show a preview comment
+                // for the first comment lets display something
+                console.log(this.props.comments[0]);
+                let comment = this.props.comments[0];
+                commentDisplay = <Text style={styles.shortComment}>{comment.author + " - said - " + keepShort(comment.body, 20)}</Text>
+            }
         }
+
         return (<View key="comments">
-            <Text style={styles.commentHeaderText}>{'# comments: ' + this.props.comments.length}</Text>
+            <View style={styles.commentHeader}>
+                <Text style={styles.commentHeaderText}>{'# comments: ' + this.props.comments.length}</Text>
+                <TouchableHighlight onPress={() => {
+                    me.showDetailPost();
+                }}>
+                    <Text style={styles.addCommentText}>ADD COMMENT</Text>
+                </TouchableHighlight>
+            </View>
             {commentDisplay}
         </View>
         )
@@ -52,16 +101,16 @@ class Post extends Component {
 
     showDetailPost(post) {
         this.props.clearPostDetail();
-        this.props.changeRoute("/"+post.category+"/" + post.id);
+        this.props.changeRoute("/" + post.category + "/" + post.id);
     }
 
     render() {
         let me = this;
-        let { post , detailed } = me.props;
+        let { post, detailed } = me.props;
 
         console.log(post);
 
-        let timestamp = new Date(parseInt(post.timestamp,10));
+        let timestamp = new Date(parseInt(post.timestamp, 10));
         let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US")
 
         return (
@@ -70,15 +119,15 @@ class Post extends Component {
                     <TouchableHighlight key={post.id} onPress={() => {
                         me.showDetailPost(post);
                     }}>
-                        <Text style={styles.categoryText}>{keepShort(post.title,  50)}</Text>
+                        <Text style={styles.categoryText}>{keepShort(post.title, 50)}</Text>
                     </TouchableHighlight>
                 )}
                 {detailed && (
                     <Text style={styles.textDetailed}>{post.title}</Text>
-                ) 
+                )
                 }
                 <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
-                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                     <Text><span role="img" aria-labelledby="author">&#x1f464;</span></Text>
                     <Text style={styles.infoLineText}>{post.author}</Text>
                 </View>
@@ -112,15 +161,15 @@ class Post extends Component {
                         <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
                     </TouchableHighlight>
                 </View>
-                {this.renderComments(true)}
+                {this.renderComments(detailed)}
                 {!this.props.detailed && (
-                        [
+                    [
                         <TouchableHighlight key="showDetailsBottom" onPress={() => {
                             me.showDetailPost(post);
                         }}>
                             <Text style={styles.seeAllDetailsText}>See all details</Text>
                         </TouchableHighlight>,
-                         <Margin key="marbot"/> ]
+                        <Margin key="marbot" />]
                 )}
             </View >
         );
@@ -128,7 +177,7 @@ class Post extends Component {
 
     handleEditPost(post) {
         this.props.clearAddPost();
-        this.props.changeRoute( "/editPost/" + post.id );
+        this.props.changeRoute("/editPost/" + post.id);
     }
 
     handleDelete(post) {
@@ -151,14 +200,13 @@ class Post extends Component {
             });
         });
         Popup.plugins().deletePost(function (value) {
-            if ( me.props.detailed ) {
+            if (me.props.detailed) {
                 me.props.goBack();
             }
             me.props.deletePost(post.id);
         });
     }
 }
-
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -182,7 +230,7 @@ function mapDispatchToProps(dispatch) {
         vote: (postId, upvote) => dispatch(vote(postId, upvote)),
         deletePost: (postId) => dispatch(deletePost(postId)),
         clearPostDetail: () => dispatch(clearPostDetail()),
-        clearAddPost : () => dispatch(clearAddPost()),
+        clearAddPost: () => dispatch(clearAddPost()),
         dispatch,
     };
 }
@@ -213,7 +261,7 @@ const styles = StyleSheet.create({
         //textDecoration: 'underline',
         marginRight: 10,
     },
-    textDetailed : {
+    textDetailed: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#333333',
@@ -253,6 +301,21 @@ const styles = StyleSheet.create({
         color: 'blue',
         marginLeft: 45,
         marginTop: 10
+    },
+    commentHeader: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    addCommentText: {
+        fontSize: 10,
+        color: 'blue',
+        backgroundColor: 'lightgray',
+        padding: 6,
+        borderRadius: 6,
+        marginLeft: 30,
     }
 }
 );
