@@ -47,12 +47,25 @@ class Post extends Component {
                 }}>
                     <Text style={styles.categoryText}>{keepShort(post.title, 50)}</Text>
                 </TouchableHighlight>
-                <Text numberOfLines={1}>{keepShort(post.body, 60)}</Text>
+                <Text numberOfLines={1} style={styles.bodyLine}>{keepShort(post.body, 60)}</Text>
 
                 <View style={styles.infoLine}>
-                    <Text>{post.category}</Text>
-                    <Text>{displayTime}</Text>
-                    <Text>&#128078;</Text><Text>{post.voteScore}</Text><Text>&#128077;</Text>
+                    <TouchableHighlight onPress={()=>{
+                            me.props.changeRoute("/category/" + post.category);
+                        }}>
+                        <Text style={styles.infoLineText}>{'Category: ' + post.category}</Text>
+                    </TouchableHighlight>
+                    <Text style={styles.infoLineTime}>{displayTime}</Text>
+                    
+                    <TouchableHighlight onPress={()=>{
+                    }}>
+                        <Text style={{fontSize:20, margin:5}}>&#128078;</Text>
+                    </TouchableHighlight>
+                    <Text>{post.voteScore}</Text>
+                    <TouchableHighlight onPress={()=>{
+                    }}>
+                        <Text  style={{fontSize:20, margin:5}}>&#128077;</Text>
+                    </TouchableHighlight>
                 </View>
                 {this.renderComments()}
             </View>
@@ -101,11 +114,29 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     categoryText: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'blue',
         //textDecoration: 'underline',
         marginRight: 10,
-    }
+    },
+    infoLineText : {
+        fontSize : 12,
+        fontWeight : 'lighter',
+        color : '#333333'
+    },
+        infoLineTime : {
+        fontSize : 12,
+        fontWeight : 'lighter',
+        color : '#333333',
+        marginLeft : 5,
+        marginLeft : 5,
+    },
+    bodyLine : {
+        fontSize : 14,
+        fontWeight : 'lighter',
+        color : '#333333'
+    },
+
 }
 );

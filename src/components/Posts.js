@@ -15,6 +15,7 @@ class Posts extends Component {
     render() {
         let me = this;
         let { activeCategory , sortField, ascending } = this.props ;
+        let numberOfPosts
 
         // display all posts not deleted.
         let displayPosts =me.props.posts ? me.props.posts.filter( (post) => !post.deleted  ) : null;
@@ -34,11 +35,15 @@ class Posts extends Component {
                         }
                     }
             );
+            numberOfPosts = displayPosts.length;
+        } else {
+            numberOfPosts = 0;
         }
 
+        
         return (
             <View style={styles.container}>
-                <Text>Category Quick Select:</Text>
+                <Text style={styles.numberOfPostsText}>{'Number of Posts: ' + numberOfPosts}</Text>
                 {displayPosts && (
                     displayPosts.map((post) => {
                         console.log(post);
@@ -54,7 +59,7 @@ class Posts extends Component {
                 )
                 }
                 {this.props.loading && (
-                    <Text>Loading Categories</Text>
+                    <Text>Loading Posts...</Text>
                 )}
             </View>
         );
@@ -82,21 +87,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(Posts)
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
+        marginTop: 5,
         marginBottom: 20,
         marginLeft: 15,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        alignItems: 'flex-start',
+        backgroundColor: 'white',
     },
-    categoryText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'blue',
-        // textDecoration: 'underline',
-         marginRight : 10,
+    numberOfPostsText : {
+        fontSize : 12,
+        color : '#333333',
+        marginBottom : 15,
     }
 }
 );

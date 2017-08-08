@@ -26,6 +26,9 @@ class App extends Component {
         <View style={styles.appheader}>
           <Text style={styles.headerLine1}>Readable</Text>
           <Text style={styles.headerLine2}> - (An udacity project by BDS)</Text>
+          <TouchableHighlight style={{marginLeft:50}}>
+            <Text style={styles.addPostText} >ADD POST</Text>
+          </TouchableHighlight>
         </View>
         <CategoryBar key={keyVal+"catbar"} activeCategory={this.props.params.type}/>
         <SortBar/>
@@ -66,6 +69,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
 
+  },
+  addPostText : {
+      fontSize: 16,
+      backgroundColor : 'lightgray',
+      color : 'black',
+      width : 120,
+      fontWeight : 'bold',
+      borderRadius : 10,
+      overFlow : 'hidden',
+      textAlign : 'center',
+      padding : 10,
   },
   headerLine1: {
     fontSize: 24,
