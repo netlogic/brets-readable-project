@@ -78,7 +78,7 @@ export const postsLoading = (loading) => ({
 
 export function fetchPosts() {
     return (dispatch) => {
-        dispatch(categoriesLoading(true));
+        dispatch(postsLoading(true));
         fetch(buildCmdURL("posts"), { headers: { 'Authorization': MYTOKEN } })
             .then((response) => {
                 if (!response.ok) {
@@ -92,5 +92,44 @@ export function fetchPosts() {
                 dispatch(postsReceived(posts));
             })
             .catch((e) => dispatch(postsError(true, e.toString())));
+    };
+}
+
+export const commentsReceived = (postId, comments) => ({
+    type: constants.COMMENTS_RECEIVED,
+    postId: postId,
+    comments: comments
+});
+
+export const commentsError = (postId, error, errorText) => ({
+    type: constants.COMMENTS_ERROR,
+    error: error,
+    errorText: errorText,
+    commentsLoading: false,
+    postId : postId,
+});
+
+export const commentsLoading = (postId, loading) => ({
+    type: constants.COMMENTS_LOADING,
+    commentsLoading: loading,
+    postId : postId
+});
+
+export function fetchComments(postId) {
+    return (dispatch) => {
+        dispatch(commentsLoading(postId,true));
+        fetch(buildCmdURL("posts/"+postId+"/comments"), { headers: { 'Authorization': MYTOKEN } })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(commentsLoading(postId,false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((comments) => {
+                dispatch(commentsReceived(postId,comments));
+            })
+            .catch((e) => dispatch(commentsError(postId,true, e.toString())));
     };
 }

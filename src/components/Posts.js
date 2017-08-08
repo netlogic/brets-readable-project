@@ -25,7 +25,7 @@ class Posts extends Component {
                     displayPosts.map((post) => {
                         console.log(post);
                         return (
-                            <Post id={post.id} post={post}/>
+                            <Post key={post.id} post={post}/>
                         );
                     })
                 )}

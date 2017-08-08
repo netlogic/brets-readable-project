@@ -7,12 +7,6 @@ import Root from './containers/Root'
 import configureStore from './store/configureStore'
 import ReactNativeWeb from 'react-native-web';
 
-
-
-import {
-  createHistory,
-} from 'history'
-
 const historyObject =  browserHistory
 
 const store = configureStore(historyObject)

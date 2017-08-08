@@ -25,10 +25,13 @@ const errorMessage = (state = initialState, action) => {
 
 
 const initialState = {
-    time: (new Date())
+    time: (new Date()),
+    comments : {},
 }
 
 const appState = (state = initialState, action) => {
+    let newcomments;
+
     switch (action.type) {
         case constants.UPDATE_TIME:
             var { time } = action
@@ -36,19 +39,16 @@ const appState = (state = initialState, action) => {
                 ...state,
                 time: time,
             }
-            break;
         case constants.CATEGORIES_RECEIVED:
             return {
                 ...state,
                 categories: action.categories,
             }
-            break;
         case constants.CATEGORIES_LOADING:
             return {
                 ...state,
                 categoriesLoading: action.categoriesLoading,
             }
-            break;
         case constants.CATEGORIES_ERROR:
             return {
                 ...state,
@@ -56,7 +56,6 @@ const appState = (state = initialState, action) => {
                 categoriesErrorText: action.categoriesErrorText,
                 categoriesLoading: action.categoriesLoading
             }
-            break;
         case constants.POSTS_RECEIVED:
             let quickPostSearch = {};
             // create a hash map of posts
@@ -70,13 +69,11 @@ const appState = (state = initialState, action) => {
                 posts: action.posts,
                 quickPostSearch
             }
-            break;
         case constants.CATEGORIES_LOADING:
             return {
                 ...state,
                 postsLoading: action.postsLoading,
             }
-            break;
         case constants.CATEGORIES_ERROR:
             return {
                 ...state,
@@ -84,13 +81,47 @@ const appState = (state = initialState, action) => {
                 postsErrorText: action.postsErrorText,
                 postsLoading: action.postsLoading
             }
-            break;
-
+        case constants.COMMENTS_RECEIVED:
+            newcomments = {
+                ...state.comments,
+                [action.postId] : {
+                    loading : false,
+                    errorLoading : false,
+                    comments : action.comments,
+                }
+            }
+            return {
+                ...state,
+                comments : newcomments
+            }
+        case constants.COMMENTS_ERROR:
+            newcomments = {
+                ...state.comments,
+                [action.postId] : {
+                    loading : false,
+                    errorLoading : action.error,
+                    errorText : action.errorText,
+                }
+            }
+            return {
+                ...state,
+                comments : newcomments
+            }
+        case constants.COMMENTS_LOADING:
+            newcomments = {
+                ...state.comments,
+                [action.postId] : {
+                    loading : action.loading,
+                }
+            }
+            return {
+                ...state,
+                comments : newcomments
+            }
         default:
             return state
     }
 }
-
 
 export default combineReducers({
     appState,
