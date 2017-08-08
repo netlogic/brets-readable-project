@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'blue',
-         textDecoration: 'underline',
+         //textDecoration: 'underline',
          marginRight : 10,
     }
 }

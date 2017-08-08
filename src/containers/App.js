@@ -26,30 +26,6 @@ class App extends Component {
           <Text style={styles.headerLine1}>An udacity project by BDS</Text>
         </View>
         <CategoryBar />
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <View style={{ height: 30, backgroundColor: 'red', width: '100%' }}>
-        </View>
-        <Link key={'cat1'} to={{ pathname: '/categories', query: {} }}>
-          Categories
-        </Link>
-        <Link key={'posts1'} to={'/silly'}>
-          Posts
-        </Link>
-        <TouchableHighlight onPress={() => {
-          me.props.changeRoute("/categories");
-          me.props.updateTime((new Date()))
-        }}>
-          <View>
-            <Text>here</Text>
-            <Text>{this.props.time.toString()}</Text>
-          </View>
-        </TouchableHighlight>
         <Posts/>
       </View>
     );

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { fetchPosts } from '../actions'
+import Post from './Post.js'
 
 class Posts extends Component {
 
@@ -14,20 +15,19 @@ class Posts extends Component {
     render() {
         let me = this;
 
+        // display all posts not deleted.
+        let displayPosts =me.props.posts ? me.props.posts.filter( (post) => !post.deleted  ) : null;
+
         return (
             <View style={styles.container}>
                 <Text>Category Quick Select:</Text>
-                {this.props.posts && (
-                    this.props.posts.map((post) => {
+                {displayPosts && (
+                    displayPosts.map((post) => {
+                        console.log(post);
                         return (
-                            <TouchableHighlight  key={post.id} onPress={() => {
-                                me.props.changeRoute("/category/" + post.id);
-                            }}>
-                                <Text style={styles.categoryText}>{' ' + post.title + ' '}</Text>
-                            </TouchableHighlight>
+                            <Post id={post.id} post={post}/>
                         );
-                    }
-                    )
+                    })
                 )}
                 {this.props.errorLoading && (
                     (
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginLeft: 15,
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'blue',
-         textDecoration: 'underline',
+        // textDecoration: 'underline',
          marginRight : 10,
     }
 }

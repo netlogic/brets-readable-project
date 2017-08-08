@@ -66,6 +66,9 @@ That repository can be found at:
 ```https://github.com/reactjs/redux/blob/v3.6.0/examples/real-world/src/index.js```
 This blog spot about react-redux-router also was guiding me.
 ```https://blog.marvelapp.com/managing-the-url-in-a-redux-app/```
+This blog is very helpful in describing bind actions to an index
+http://blog.scottlogic.com/2016/05/19/redux-reducer-arrays.html
+
 
 uuids for items records are created via package:
 node-uuid https://github.com/broofa/node-uuid
@@ -75,6 +78,8 @@ node-uuid https://github.com/broofa/node-uuid
  my app on other browsers.  Unfortunately flex-box screws up and normally
  hacks need to be implemented so presentation is improved on IE and FireFox.
 
- 
+Server could be made better to return comment count with post to stop multiple requests on post view
+
+
 
 

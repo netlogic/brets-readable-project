@@ -58,9 +58,17 @@ const appState = (state = initialState, action) => {
             }
             break;
         case constants.POSTS_RECEIVED:
+            let quickPostSearch = {};
+            // create a hash map of posts
+            // so we can quickly retrieve
+            // on detail page
+            for ( let post of action.posts ) {
+                quickPostSearch[post.id] = post;
+            } 
             return {
                 ...state,
                 posts: action.posts,
+                quickPostSearch
             }
             break;
         case constants.CATEGORIES_LOADING:
