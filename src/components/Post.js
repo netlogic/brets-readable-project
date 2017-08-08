@@ -14,13 +14,24 @@ function keepShort(a, len) {
     return a;
 }
 
+
+const Margin = () => {
+    return <View style={{
+        height: 1, width: 290,
+        alignSelf: 'flexStart',
+        marginBottom: 15, marginTop: 15, marginRight: 15, backgroundColor: 'lightgray'
+    }} />;
+}
+
+
+
 class Post extends Component {
 
     componentDidMount() {
         this.props.fetchComments(this.props.post.id);
     }
 
-    renderComments() {
+    renderComments(all) {
         if (this.props.loading) {
             return <Text>loading comments...</Text>
         }
@@ -28,7 +39,23 @@ class Post extends Component {
             let errormsg = ```error loading comments (${this.props.errorText})```;
             return (<Text>{errormsg}</Text>);
         }
-        return (<Text>{this.props.comments.length}</Text>);
+        let commentDisplay;
+
+        if (this.props.comments.length > 0) {
+            // for the first comment lets display something
+            console.log(this.props.comments[0]);
+            let comment = this.props.comments[0];
+            commentDisplay = <Text style={styles.shortComment}>{comment.author + " - said - " + keepShort(comment.body, 20)}</Text>
+        }
+        return (<View key="comments">
+            <Text style={styles.commentHeaderText}>{'# comments: ' + this.props.comments.length}</Text>
+            {commentDisplay}            
+        </View>
+        )
+    }
+
+    showDetailPost(postId) {
+        this.props.changeRoute("/postDetail/" + postId);
     }
 
     render() {
@@ -42,9 +69,8 @@ class Post extends Component {
 
         return (
             <View>
-
                 <TouchableHighlight key={post.id} onPress={() => {
-                    me.props.changeRoute("/category/" + post.id);
+                    me.showDetailPost( post.id );
                 }}>
                     <Text style={styles.categoryText}>{keepShort(post.title, 50)}</Text>
                 </TouchableHighlight>
@@ -75,8 +101,14 @@ class Post extends Component {
                         <Text style={{ fontSize: 20, margin: 5 }}>&#128465;</Text>
                     </TouchableHighlight>
                 </View>
-                {this.renderComments()}
-            </View>
+                {this.renderComments(true)}
+                 <TouchableHighlight onPress={() => {
+                    me.showDetailPost( post.id );
+                }}>
+                    <Text style={styles.seeAllDetailsText}>See all details</Text>
+                </TouchableHighlight>
+                <Margin />
+            </View >
         );
     }
 
@@ -106,7 +138,7 @@ class Post extends Component {
             });
         });
         Popup.plugins().deletePost(function (value) {
-            me.props.deletePost( post.id );
+            me.props.deletePost(post.id);
         });
     }
 }
@@ -179,6 +211,25 @@ const styles = StyleSheet.create({
         fontWeight: 'lighter',
         color: '#333333'
     },
-
+    commentHeaderText: {
+        fontSize: 12,
+        fontWeight: 'lighter',
+        color: '#333333',
+        marginLeft: 5,
+        marginLeft: 5,
+    },
+    shortComment: {
+        fontSize: 12,
+        fontWeight: 'lighter',
+        color: '#333333',
+        marginLeft: 30,
+    },
+    seeAllDetailsText : {
+        fontSize : 10,
+        fontWeight : 'bold',
+        color : 'blue',
+        marginLeft: 45,
+        marginTop : 10
+    }
 }
 );
