@@ -16,7 +16,7 @@ class CategoryBar extends Component {
     render() {
         let me = this;
         let categories = this.props.categories;
-        let activeCategory = this.props.activeCategory || "ALL";
+        let activeCategory = this.props.activeCategory || "all";
 
         if (categories) {
             categories = categories.slice();
@@ -30,7 +30,7 @@ class CategoryBar extends Component {
                     categories.map((category) => {
                         return (
                             <TouchableHighlight key={category.name} onPress={() => {
-                                if (category.name === 'ALL') {
+                                if (category.name === 'all') {
                                     me.props.changeRoute("/");
                                 } else {
                                     me.props.changeRoute("/category/" + category.name);
@@ -88,14 +88,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryText: {
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: 'normal',
         color: 'gray',
         //textDecoration: 'underline',
         marginRight: 10,
     },
     categoryTextSelected: {
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'black',
         backgroundColor : 'lightgray',

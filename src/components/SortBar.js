@@ -71,14 +71,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryText: {
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: 'normal',
         color: 'gray',
         //textDecoration: 'underline',
         marginRight: 10,
     },
     categoryTextSelected: {
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'black',
         backgroundColor : 'lightgray',

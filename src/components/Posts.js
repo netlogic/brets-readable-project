@@ -14,13 +14,26 @@ class Posts extends Component {
 
     render() {
         let me = this;
-        let { activeCategory } = this.props ;
+        let { activeCategory , sortField, ascending } = this.props ;
 
         // display all posts not deleted.
         let displayPosts =me.props.posts ? me.props.posts.filter( (post) => !post.deleted  ) : null;
 
         if ( displayPosts && activeCategory ) {
             displayPosts = displayPosts.filter ( post => post.category===activeCategory)
+        }
+
+        // now sort posts based on criteria
+        if ( displayPosts ) {
+            displayPosts.sort( 
+                    (a,b)=> {
+                        if ( ascending ) {
+                            return a[sortField] >= b[sortField];
+                        } else {
+                            return a[sortField] <= b[sortField];
+                        }
+                    }
+            );
         }
 
         return (
@@ -53,6 +66,8 @@ const mapStateToProps = (state, ownProps) => ({
     loading: state.appState.postsLoading,
     errorLoading: state.appState.postsError,
     errorText: state.appState.postsErrorText,
+    sortField: state.sorting.sortField,
+    ascending : state.sorting.ascending,
 })
 
 function mapDispatchToProps(dispatch) {
