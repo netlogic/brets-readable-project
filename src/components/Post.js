@@ -43,10 +43,13 @@ class Post extends Component {
         }
         let commentDisplay;
 
-
-
         if (me.props.comments.length > 0) {
-            let comments = me.props.comments.sort((a, b) => a.timestamp < b.timestamp);
+            let comments = me.props.comments.sort(
+                (a, b) => {
+                    if (a.timestamp < b.timestamp) {
+                        return 1;
+                    } return -1
+                });
             if (all) {
 
                 commentDisplay = comments.map((c) => {
@@ -146,9 +149,9 @@ class Post extends Component {
                     <Text style={styles.textDetailed}>{post.title}</Text>
                 )
                 }
-                <View style={{height:40}}>
+                <View style={{ height: 40 }}>
                     <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
-                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', flexBasis : '100'}}>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', flexBasis: '100' }}>
                         <Text><span role="img" aria-labelledby="author">&#x1f464;</span></Text>
                         <Text style={styles.infoLineText}>{post.author}</Text>
                     </View>
@@ -306,8 +309,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height : 40,
-        flexBasis : '100'
+        height: 40,
+        flexBasis: '100'
     },
     categoryText: {
         fontSize: 16,
@@ -363,7 +366,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         marginBottom: 10,
-        flexBasis : '100'
+        flexBasis: '100'
     },
     addCommentText: {
         fontSize: 10,
@@ -374,7 +377,7 @@ const styles = StyleSheet.create({
         marginLeft: 30,
     },
     mainDisplay: {
-        height : 'auto',
+        height: 'auto',
     }
 }
 );

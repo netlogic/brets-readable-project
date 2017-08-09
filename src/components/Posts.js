@@ -8,45 +8,54 @@ import Post from './Post.js'
 class Posts extends Component {
 
     componentDidMount() {
-       this.props.fetchPosts();
+        this.props.fetchPosts();
     }
 
     render() {
+
+
         let me = this;
-        let { activeCategory , sortField, ascending } = this.props ;
+        let { activeCategory, sortField, ascending } = this.props;
         let numberOfPosts
 
         // display all posts not deleted.
-        let displayPosts =me.props.posts ? me.props.posts.filter( (post) => !post.deleted  ) : null;
+        let displayPosts = me.props.posts ? me.props.posts.filter((post) => !post.deleted) : null;
 
-        if ( displayPosts && activeCategory ) {
-            displayPosts = displayPosts.filter ( post => post.category===activeCategory)
+        if (displayPosts && activeCategory) {
+            displayPosts = displayPosts.filter(post => post.category === activeCategory)
         }
-
         // now sort posts based on criteria
-        if ( displayPosts ) {
-            displayPosts.sort( 
-                    (a,b)=> {
-                        if ( ascending ) {
-                            return a[sortField] >= b[sortField];
+        if (displayPosts) {
+            displayPosts.sort(
+                (a, b) => {
+                    if (ascending) {
+                        if (  a[sortField] >= b[sortField] ) {
+                            return 1;
                         } else {
-                            return a[sortField] <= b[sortField];
+                            return -1;
+                        }
+                    } else {
+                        if ( a[sortField] <= b[sortField] ) {
+                            return 1;
+                        } else  {
+                            return -1;
                         }
                     }
+                }
             );
             numberOfPosts = displayPosts.length;
         } else {
             numberOfPosts = 0;
         }
 
-        
+
         return (
             <View style={styles.container}>
                 <Text style={styles.numberOfPostsText}>{'Number of Posts: ' + numberOfPosts}</Text>
                 {displayPosts && (
                     displayPosts.map((post) => {
                         return (
-                            <Post key={post.id} post={post}/>
+                            <Post key={post.id+sortField} post={post} />
                         );
                     })
                 )}
@@ -70,7 +79,7 @@ const mapStateToProps = (state, ownProps) => ({
     errorLoading: state.appState.postsError,
     errorText: state.appState.postsErrorText,
     sortField: state.sorting.sortField,
-    ascending : state.sorting.ascending,
+    ascending: state.sorting.ascending,
 })
 
 function mapDispatchToProps(dispatch) {
@@ -94,10 +103,10 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         backgroundColor: 'white',
     },
-    numberOfPostsText : {
-        fontSize : 12,
-        color : '#333333',
-        marginBottom : 15,
+    numberOfPostsText: {
+        fontSize: 12,
+        color: '#333333',
+        marginBottom: 15,
     }
 }
 );
