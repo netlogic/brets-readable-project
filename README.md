@@ -2,9 +2,9 @@
 
 The following will be needed to be done to run this project:
 __1. The readable backend server from udacity will need to be installed.__
-__2. My project code will need to be downloaded and setup.___
+__2. My project code will need to be downloaded and setup.__
 
-Steps for botth are below and then follows my project notes.
+Steps for both are below and then follows my project notes.
 
 ## Install the readable project backend server supplied by udacity.
 
