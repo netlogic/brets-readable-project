@@ -6,13 +6,23 @@ import { goBack } from 'react-router-redux'
 import AddCategoryBar from '../components/AddCategoryBar'
 import Popup from 'react-popup';
 
-import { setAddPostTitle, setAddPostBody, setAddPostAuthor, setAddPostCategory, addPost } from '../actions'
+import {
+    setAddPostTitle, setAddPostBody,
+    addComment,
+    setAddPostAuthor, setAddPostCategory
+} from '../actions'
 
-class AddPost extends Component {
+class EditComment extends Component {
 
     render() {
         let me = this;
         let props = me.props;
+
+        if (!props.post) {
+            setTimeout(
+                props.goBack, 10);
+            return <Text>Going back</Text>;
+        }
 
         return (
             <View style={styles.container}>
@@ -23,35 +33,23 @@ class AddPost extends Component {
                     }}>
                         <Text style={styles.headerLine1}>{'<BACK    '}</Text>
                     </TouchableHighlight>
-                    <Text style={styles.headerLine1}>Add Post</Text>
-                    <TouchableHighlight disabled={!props.valid}  style={{ marginLeft: 50 }} onPress={()=>{
-                        props.addPost( null, props.title, props.body, props.author, props.category );
+                    <Text style={styles.headerLine1}>Edit Your Comment To The Post</Text>
+                    <TouchableHighlight disabled={!props.valid} style={{ marginLeft: 50 }} onPress={() => {
+                        props.addComment(props.post, props.author, props.body);
                         me.props.goBack();
                     }}>
-                        <Text style={props.valid ? styles.addBtnActive :  styles.addBtn} >ADD!</Text>
+                        <Text style={props.valid ? styles.addBtnActive : styles.addBtn} >DONE</Text>
                     </TouchableHighlight>
                 </View>
                 <View style={{ marginLeft: 15 }}>
-                    <Text style={styles.headerLine2}>Please enter all information below and press Add!</Text>
+                    <Text style={styles.headerLine1}>{props.post.title}</Text>
+                    <Text style={styles.headerLine2}>Please edit comment below.</Text>
                     <View style={styles.inputRow}>
-                        <Text style={styles.inputTitle}>Title:</Text>
-                        <TextInput  style={styles.inputText}  placeholder='title' onChange={(event) => {
-                            me.props.setAddPostTitle(event.target.value);
-                        }} value={props.title} />
-                    </View>
-                    <View style={styles.inputRow}>
-                        <Text style={styles.inputTitle}>Body:</Text>
-                        <TextInput  style={styles.inputText}  placeholder='body' onChange={(event) => {
+                        <Text style={styles.inputTitle}>Comment:</Text>
+                        <TextInput style={styles.inputText} placeholder='comment' onChange={(event) => {
                             me.props.setAddPostBody(event.target.value);
                         }} value={props.body} />
                     </View>
-                    <View style={styles.inputRow}>
-                        <Text style={styles.inputTitle}>Author:</Text>
-                        <TextInput style={styles.inputText} placeholder='author' onChange={(event) => {
-                            me.props.setAddPostAuthor(event.target.value);
-                        }} value={props.author} />
-                    </View>
-                    <AddCategoryBar/>
                 </View>
             </View>
         );
@@ -59,28 +57,25 @@ class AddPost extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    title: state.addPost.title,
     author: state.addPost.author,
-    category: state.addPost.category,
     body: state.addPost.body,
-    valid : state.addPost.valid,
+    valid: state.addPost.valid,
+    post: state.addPost.addingComment,
 })
 
 function mapDispatchToProps(dispatch) {
     return {
         goBack: () => dispatch(goBack()),
-        setAddPostTitle: (val) => dispatch(setAddPostTitle(val)),
         setAddPostBody: (val) => dispatch(setAddPostBody(val)),
         setAddPostAuthor: (val) => dispatch(setAddPostAuthor(val)),
-        setAddPostCategory: (val) => dispatch(setAddPostCategory(val)),
-        addPost : (id,title,body,author,category) =>dispatch(addPost(id,title,body,author,category)),
+        addComment: (post, author, body) => dispatch(addComment(post, author, body)),
         dispatch,
 
     };
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPost)
+export default connect(mapStateToProps, mapDispatchToProps)(EditComment)
 
 const styles = StyleSheet.create({
     container: {
@@ -89,7 +84,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundColor: '#FFFFFF',
-        width : '100%',
+        width: '100%',
     },
     appheader: {
         width: '100%',
@@ -111,8 +106,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
     },
-    addBtnActive : {
-       fontSize: 16,
+    addBtnActive: {
+        fontSize: 16,
         backgroundColor: 'lightgray',
         color: 'blue',
         width: 120,
@@ -122,8 +117,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
     },
-    addBtn : {
-       fontSize: 16,
+    addBtn: {
+        fontSize: 16,
         backgroundColor: 'lightgray',
         color: 'gray',
         width: 120,
@@ -154,7 +149,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop: 15,
-        width : 600,
+        width: 600,
     },
     inputTitle: {
         fontSize: 18,
@@ -166,7 +161,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#333333',
         fontWeight: 'normal',
-        width:  600,
+        width: 600,
         height: 40,
         borderRadius: 6,
         borderColor: 'black',

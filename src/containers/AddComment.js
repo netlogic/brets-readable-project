@@ -34,7 +34,7 @@ class AddComment extends Component {
                         <Text style={styles.headerLine1}>{'<BACK    '}</Text>
                     </TouchableHighlight>
                     <Text style={styles.headerLine1}>Add Comment To Post</Text>
-                    <TouchableHighlight style={{ marginLeft: 50 }} onPress={() => {
+                    <TouchableHighlight  disabled={!props.valid}  style={{ marginLeft: 50 }} onPress={() => {
                         props.addComment(props.post, props.author, props.body);
                         me.props.goBack();
                     }}>
@@ -74,7 +74,7 @@ function mapDispatchToProps(dispatch) {
         goBack: () => dispatch(goBack()),
         setAddPostBody: (val) => dispatch(setAddPostBody(val)),
         setAddPostAuthor: (val) => dispatch(setAddPostAuthor(val)),
-        addComment: (post, author, body) => dispatch(addComment(post, author, body, null)),
+        addComment: (post, author, body) => dispatch(addComment(post, author, body)),
         dispatch,
 
     };

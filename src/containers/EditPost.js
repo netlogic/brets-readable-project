@@ -53,7 +53,7 @@ class AddPost extends Component {
                         <Text style={styles.headerLine1}>{'<BACK    '}</Text>
                     </TouchableHighlight>
                     <Text style={styles.headerLine1}>Edit Post</Text>
-                    <TouchableHighlight style={{ marginLeft: 50 }} onPress={() => {
+                    <TouchableHighlight disabled={!props.valid}  style={{ marginLeft: 50 }} onPress={() => {
                         props.addPost(postId, props.title, props.body);
                         me.props.goBack();
                     }}>

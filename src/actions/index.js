@@ -420,12 +420,17 @@ export function addPost(id, title, bodyText, author, category) {
 }
 
 
-export function addComment(post, author, bodyText, commentId) {
+export function addComment(post, author, bodyText) {
     return (dispatch) => {
         dispatch(addingPost(true));
         let method;
         let cmd;
         let body;
+        let commentId;
+
+        if ( post.comment ) {
+            commentId = post.comment.id;
+        }
 
         if (commentId) {
             method = 'PUT';

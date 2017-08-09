@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push, goBack } from 'react-router-redux'
-import { fetchComments, voteComment, vote, 
-        deleteComment, addingComment,
+import { fetchComments, voteComment, vote, setAddPostBody,
+        deleteComment, addingComment, setAddPostAuthor,
         deletePost, clearPostDetail, clearAddPost } from '../actions'
 import Popup from 'react-popup';
 
@@ -72,7 +72,7 @@ class Post extends Component {
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
-                               // me.handleEditPost(post);
+                                me.handleEditComment(me.props.post,c);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
                             </TouchableHighlight>
@@ -113,6 +113,16 @@ class Post extends Component {
         this.props.clearAddPost();
         this.props.addingComment(this.props.post);
         this.props.changeRoute( "/addComment" );
+    }
+
+    handleEditComment(post,comment) {
+        let p = Object.assign( {} , post ) ;
+        p.comment = comment;
+        this.props.clearAddPost();
+        this.props.addingComment(p);
+        this.props.setAddPostBody(comment.body);
+        this.props.setAddPostAuthor(comment.author);
+        this.props.changeRoute( "/editComment" );
     }
 
     render() {
@@ -270,6 +280,8 @@ function mapDispatchToProps(dispatch) {
         clearAddPost: () => dispatch(clearAddPost()),
         addingComment: (post) => dispatch(addingComment(post)),
         deleteComment: (postId, commentId) => dispatch(deleteComment(postId, commentId)),
+        setAddPostAuthor: (val) => dispatch(setAddPostAuthor(val)),
+        setAddPostBody: (val) => dispatch(setAddPostBody(val)),
         dispatch,
     };
 }
