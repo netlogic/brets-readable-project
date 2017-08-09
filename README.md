@@ -93,7 +93,7 @@ Udacity server could be made better to return comment count with post to stop mu
 
 Did not have time to work with a UX designer.  Application sorely needs some guidance on UX.
 But I believe (hopefully) all items in rubric have been met.
-Rubice can be found here:
+Rubric can be found here:
 https://review.udacity.com/#!/rubrics/1017/view
 
 To vote on a Post please select either thumb up 👍 or thumb down 👎 button.
