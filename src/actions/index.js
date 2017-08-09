@@ -159,7 +159,7 @@ export const votingCommentComplete = (comment, upvote, postId) => ({
     type: constants.VOTING_COMMENT_COMPLETE,
     postId: postId,
     upvote: upvote,
-    comment : comment
+    comment: comment
 });
 
 export const votingError = (postId, error, errorText) => ({
@@ -238,7 +238,7 @@ export const deletePostComplete = (postId) => ({
 export const deleteCommentComplete = (postId, commentId) => ({
     type: constants.DELETE_COMMENT_COMPLETE,
     postId: postId,
-    commentId : commentId,
+    commentId: commentId,
 });
 
 export const deletingPostError = (postId, error, errorText) => ({
@@ -341,9 +341,15 @@ export function fetchPostDetail(postId) {
     };
 }
 
+export const addingComment = post => ({
+    type: constants.ADDING_COMMENT,
+    post: post
+}
+)
+
 export const addingPost = loading => ({
-    type : constants.ADDINGPOST_LOADING,
-    loading : loading,
+    type: constants.ADDINGPOST_LOADING,
+    loading: loading,
 });
 
 export const addingPostError = (error, errorText) => ({
@@ -360,14 +366,19 @@ export const addedPost = post => ({
 });
 
 
+export const addedComment = comment => ({
+    type: constants.ADDED_COMMENT,
+    comment: comment,
+})
+
 export function addPost(id, title, bodyText, author, category) {
     return (dispatch) => {
         dispatch(addingPost(true));
         let method;
-        let cmd ;
+        let cmd;
         let body;
 
-        if ( id ) {
+        if (id) {
             method = 'PUT';
             cmd = "posts/" + id;
             body = JSON.stringify({
@@ -379,9 +390,9 @@ export function addPost(id, title, bodyText, author, category) {
             body = JSON.stringify({
                 title: title, body: bodyText,
                 timestamp: Date.now(),
-                author: author, 
+                author: author,
                 category: category,
-                id : uuid()
+                id: uuid()
             })
         }
 
@@ -394,7 +405,7 @@ export function addPost(id, title, bodyText, author, category) {
             body: body,
         })
             .then((response) => {
-                if (!response.ok ) {
+                if (!response.ok) {
                     throw Error(response.statusText);
                 }
                 dispatch(addingPost(false));
@@ -403,6 +414,56 @@ export function addPost(id, title, bodyText, author, category) {
             .then((response) => response.json())
             .then((post) => {
                 dispatch(addedPost(post));
+            })
+            .catch((e) => dispatch(addingPostError(true, e.toString())));
+    };
+}
+
+
+export function addComment(post, author, bodyText, commentId) {
+    return (dispatch) => {
+        dispatch(addingPost(true));
+        let method;
+        let cmd;
+        let body;
+
+        if (commentId) {
+            method = 'PUT';
+            cmd = "comments/" + commentId;
+            body = JSON.stringify({
+                body: bodyText,
+                author : author,
+            })
+        } else {
+            method = 'POST';
+            cmd = "comments";
+            body = JSON.stringify({
+                body: bodyText,
+                timestamp: Date.now(),
+                author: author,
+                parentId: post.id,
+                id: uuid()
+            })
+        }
+
+        fetch(buildCmdURL(cmd), {
+            headers: {
+                'Authorization': MYTOKEN,
+                'Content-Type': 'application/json',
+            },
+            method: method,
+            body: body,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(addingPost(false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((comment) => {
+                dispatch(addedComment(comment));
             })
             .catch((e) => dispatch(addingPostError(true, e.toString())));
     };

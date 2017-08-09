@@ -153,21 +153,21 @@ function deletingPost(state, postId, error, errorText, loading, post) {
     }
 }
 
-function buildNewCommentArray(commentsHolder, comment , deletedId ) {
+function buildNewCommentArray(commentsHolder, comment, deletedId) {
     if (!commentsHolder) {
         commentsHolder = {};
     }
     let comments = commentsHolder.comments;
-    if ( !comments ) {
+    if (!comments) {
         comments = [];
     }
-    let removeId = deletedId || ( comment ? comment.id : undefined );
+    let removeId = deletedId || (comment ? comment.id : undefined);
     comments = comments.filter((a) => {
-        console.log(a,comment);
-        return ( !a.deleted && a.id !== removeId );
+        console.log(a, comment);
+        return (!a.deleted && a.id !== removeId);
     });
-    if ( comment ) {
-        comments.push( comment );
+    if (comment) {
+        comments.push(comment);
     }
     return comments;
 }
@@ -266,15 +266,27 @@ const appState = (state = initialState, action) => {
                 comments: newcomments
             }
         case constants.VOTING_COMMENT_COMPLETE:
-            // postId: postId,
-            // upvote: upvote,
-            // comment : comment
             newcomments = {
                 ...state.comments,
                 [action.comment.parentId]: {
                     loading: false,
                     errorLoading: false,
-                    comments: buildNewCommentArray( state.comments ? (state.comments[action.comment.parentId]) : [], action.comment),
+                    comments: buildNewCommentArray(state.comments ? (state.comments[action.comment.parentId]) : [], action.comment),
+                }
+            }
+            return {
+                ...state,
+                comments: newcomments
+            }
+        case constants.ADDED_COMMENT:
+            newcomments = {
+                ...state.comments,
+                [action.comment.parentId]: {
+                    loading: false,
+                    errorLoading: false,
+                    loadingPostDetail: undefined,
+                    loadingPostDetailError: undefined,
+                    comments: buildNewCommentArray(state.comments ? (state.comments[action.comment.parentId]) : [], action.comment),
                 }
             }
             return {
@@ -282,12 +294,12 @@ const appState = (state = initialState, action) => {
                 comments: newcomments
             }
         case constants.DELETE_COMMENT_COMPLETE:
-                newcomments = {
+            newcomments = {
                 ...state.comments,
                 [action.postId]: {
                     loading: false,
                     errorLoading: false,
-                    comments: buildNewCommentArray( state.comments ? (state.comments[action.postId]) : [], null , action.commentId),
+                    comments: buildNewCommentArray(state.comments ? (state.comments[action.postId]) : [], null, action.commentId),
                 }
             }
             return {
@@ -351,9 +363,13 @@ const intialStateAddPost = {
     category: "redux",
     valid: false,
     oldPostId: undefined,
+    addingComment: undefined,
 }
 
-function addPostValid(t, b, a, c) {
+function addPostValid(p, t, b, a, c) {
+    if (p && b && b.length && a && a.length) {
+        return true;
+    }
     if (a && a.length > 0) {
         if (b && b.length > 0) {
             if (c && c.length > 0) {
@@ -372,25 +388,25 @@ const addPost = (state = intialStateAddPost, action) => {
             return {
                 ...state,
                 title: action.title,
-                valid: addPostValid(action.title, state.body, state.author, state.category)
+                valid: addPostValid(state.addingComment, action.title, state.body, state.author, state.category)
             }
         case constants.ADD_POST_BODY:
             return {
                 ...state,
                 body: action.body,
-                valid: addPostValid(state.title, action.body, state.author, state.category)
+                valid: addPostValid(state.addingComment, state.title, action.body, state.author, state.category)
             }
         case constants.ADD_POST_AUTHOR:
             return {
                 ...state,
                 author: action.author,
-                valid: addPostValid(state.title, state.body, action.author, state.category)
+                valid: addPostValid(state.addingComment, state.title, state.body, action.author, state.category)
             }
         case constants.ADD_POST_CATEGORY:
             return {
                 ...state,
                 category: action.category,
-                valid: addPostValid(state.title, state.body, state.author, action.category)
+                valid: addPostValid(state.addingComment, state.title, state.body, state.author, action.category)
             }
         case constants.ADD_POST_CLEAR:
             return {
@@ -402,7 +418,13 @@ const addPost = (state = intialStateAddPost, action) => {
                 valid: false,
                 loading: false,
                 oldPostId: undefined,
-                addingPostDetailError: undefined
+                addingPostDetailError: undefined,
+                addingComment: undefined,
+            }
+        case constants.ADDING_COMMENT:
+            return {
+                ...state,
+                addingComment: action.post
             }
         case constants.ADDINGPOST_LOADING:
             return {

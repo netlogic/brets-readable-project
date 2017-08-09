@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push, goBack } from 'react-router-redux'
 import { fetchComments, voteComment, vote, 
-        deleteComment,
+        deleteComment, addingComment,
         deletePost, clearPostDetail, clearAddPost } from '../actions'
 import Popup from 'react-popup';
 
@@ -72,7 +72,7 @@ class Post extends Component {
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
-                                //me.handleEditPost(post);
+                               // me.handleEditPost(post);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
                             </TouchableHighlight>
@@ -94,7 +94,7 @@ class Post extends Component {
             <View style={styles.commentHeader}>
                 <Text style={styles.commentHeaderText}>{'# comments: ' + this.props.comments.length}</Text>
                 <TouchableHighlight onPress={() => {
-                    me.showDetailPost();
+                    me.addComment();
                 }}>
                     <Text style={styles.addCommentText}>ADD COMMENT</Text>
                 </TouchableHighlight>
@@ -107,6 +107,12 @@ class Post extends Component {
     showDetailPost(post) {
         this.props.clearPostDetail();
         this.props.changeRoute("/" + post.category + "/" + post.id);
+    }
+
+    addComment() {
+        this.props.clearAddPost();
+        this.props.addingComment(this.props.post);
+        this.props.changeRoute( "/addComment" );
     }
 
     render() {
@@ -262,6 +268,7 @@ function mapDispatchToProps(dispatch) {
         deletePost: (postId) => dispatch(deletePost(postId)),
         clearPostDetail: () => dispatch(clearPostDetail()),
         clearAddPost: () => dispatch(clearAddPost()),
+        addingComment: (post) => dispatch(addingComment(post)),
         deleteComment: (postId, commentId) => dispatch(deleteComment(postId, commentId)),
         dispatch,
     };
