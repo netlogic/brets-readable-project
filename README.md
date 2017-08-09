@@ -30,7 +30,7 @@ once the npm finishes and the command prompt return please enter
 
 ```npm start```
 
-to start the server the project I have built will be using.
+to start the server for the project I have built will be using.
 
 If all went well the following message should appear
 
@@ -83,20 +83,27 @@ I checked in my code often and all git commits can be found at:
 
 https://github.com/netlogic/brets-readable-project.git
 
- As I suck at CSS I used react-native-web.
- I have been building a large number of my apps with react-native-web
- For best display please use chrome as I have not tested the presentation of
- my app on other browsers.  Unfortunately flex-box screws up and normally
- hacks need to be implemented so presentation is improved on IE and FireFox.
+I suck at pure html and CSS so I used react-native-web.
+I have been building a large number of my apps with react-native-web
+For best display please use chrome or safari as I have not tested the presentation of
+my app on other browsers.  Unfortunately flex-box screws up and normally
+hacks need to be implemented so presentation is improved on IE and FireFox.
 
-Server could be made better to return comment count with post to stop multiple requests on post view.
+Udacity server could be made better to return comment count with post to stop multiple requests on post view.
 
 Did not have time to work with a UX designer.  Application sorely needs some guidance on UX.
 But I believe (hopefully) all items in rubric have been met.
+Rubice can be found here:
+https://review.udacity.com/#!/rubrics/1017/view
 
 To vote on a Post please select either thumb up 👍 or thumb down 👎 button.
+Aria support has been added to icons.
 
-Not be allowed to use state makes some things trickier, but overall react-redux is fun to play with.
+One comment:
+Not being allowed to use state makes some things trickier, but overall react-redux is fun to play with.
+But I hope we can use state on the next project.
+
+Looking forward to comments and learning more.
 
 
 
