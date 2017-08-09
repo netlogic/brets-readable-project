@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push, goBack } from 'react-router-redux'
-import { fetchComments, voteComment, vote, setAddPostBody,
-        deleteComment, addingComment, setAddPostAuthor,
-        deletePost, clearPostDetail, clearAddPost } from '../actions'
+import {
+    fetchComments, voteComment, vote, setAddPostBody,
+    deleteComment, addingComment, setAddPostAuthor,
+    deletePost, clearPostDetail, clearAddPost
+} from '../actions'
 import Popup from 'react-popup';
 
 function keepShort(a, len) {
@@ -29,7 +31,7 @@ class Post extends Component {
         this.props.fetchComments(this.props.post.id);
     }
 
-    renderComments(all,postId) {
+    renderComments(all, postId) {
         let me = this;
 
         if (me.props.loading) {
@@ -44,7 +46,7 @@ class Post extends Component {
 
 
         if (me.props.comments.length > 0) {
-            let comments = me.props.comments.sort( (a,b)=> a.timestamp < b.timestamp );
+            let comments = me.props.comments.sort((a, b) => a.timestamp < b.timestamp);
             if (all) {
 
                 commentDisplay = comments.map((c) => {
@@ -56,23 +58,23 @@ class Post extends Component {
                         <View style={styles.infoLine}>
                             <Text style={styles.infoLineTime}>{displayTime}</Text>
                             <TouchableHighlight onPress={() => {
-                                me.props.voteComment(postId,c.id, false);
+                                me.props.voteComment(postId, c.id, false);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteDown">&#128078;</span></Text>
                             </TouchableHighlight>
                             <Text>{c.voteScore}</Text>
                             <TouchableHighlight onPress={() => {
-                                me.props.voteComment(postId,c.id, true );
+                                me.props.voteComment(postId, c.id, true);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
-                                me.handleDeleteComment(postId,c.id);
+                                me.handleDeleteComment(postId, c.id);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
-                                me.handleEditComment(me.props.post,c);
+                                me.handleEditComment(me.props.post, c);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
                             </TouchableHighlight>
@@ -84,7 +86,6 @@ class Post extends Component {
             } else {
                 // show a preview comment
                 // for the first comment lets display something
-                console.log(this.props.comments[0]);
                 let comment = comments[0];
                 commentDisplay = <Text style={styles.shortComment}>{comment.author + " - said - " + keepShort(comment.body, 20)}</Text>
             }
@@ -112,30 +113,28 @@ class Post extends Component {
     addComment() {
         this.props.clearAddPost();
         this.props.addingComment(this.props.post);
-        this.props.changeRoute( "/addComment" );
+        this.props.changeRoute("/addComment");
     }
 
-    handleEditComment(post,comment) {
-        let p = Object.assign( {} , post ) ;
+    handleEditComment(post, comment) {
+        let p = Object.assign({}, post);
         p.comment = comment;
         this.props.clearAddPost();
         this.props.addingComment(p);
         this.props.setAddPostBody(comment.body);
         this.props.setAddPostAuthor(comment.author);
-        this.props.changeRoute( "/editComment" );
+        this.props.changeRoute("/editComment");
     }
 
     render() {
         let me = this;
         let { post, detailed } = me.props;
 
-        console.log(post);
-
         let timestamp = new Date(parseInt(post.timestamp, 10));
         let displayTime = timestamp.toLocaleTimeString("en-US") + " - " + timestamp.toLocaleDateString("en-US")
 
         return (
-            <View>
+            <View style={styles.mainDisplay}>
                 {!detailed && (
                     <TouchableHighlight key={post.id} onPress={() => {
                         me.showDetailPost(post);
@@ -147,40 +146,44 @@ class Post extends Component {
                     <Text style={styles.textDetailed}>{post.title}</Text>
                 )
                 }
-                <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <Text><span role="img" aria-labelledby="author">&#x1f464;</span></Text>
-                    <Text style={styles.infoLineText}>{post.author}</Text>
+                <View style={{height:40}}>
+                    <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                        <Text><span role="img" aria-labelledby="author">&#x1f464;</span></Text>
+                        <Text style={styles.infoLineText}>{post.author}</Text>
+                    </View>
                 </View>
-                <View style={styles.infoLine}>
-                    <TouchableHighlight onPress={() => {
-                        me.props.changeRoute("/" + post.category);
-                    }}>
-                        <Text style={styles.infoLineText}>{'Category: ' + post.category}</Text>
-                    </TouchableHighlight>
-                    <Text style={styles.infoLineTime}>{displayTime}</Text>
+                <View>
+                    <View style={styles.infoLine}>
+                        <TouchableHighlight onPress={() => {
+                            me.props.changeRoute("/" + post.category);
+                        }}>
+                            <Text style={styles.infoLineText}>{'Category: ' + post.category}</Text>
+                        </TouchableHighlight>
+                        <Text style={styles.infoLineTime}>{displayTime}</Text>
 
-                    <TouchableHighlight onPress={() => {
-                        me.props.vote(post.id, false);
-                    }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="voteDown">&#128078;</span></Text>
-                    </TouchableHighlight>
-                    <Text>{post.voteScore}</Text>
-                    <TouchableHighlight onPress={() => {
-                        me.props.vote(post.id, true);
-                    }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight onPress={() => {
-                        me.handleDelete(post);
-                    }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight onPress={() => {
-                        me.handleEditPost(post);
-                    }}>
-                        <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
-                    </TouchableHighlight>
+                        <TouchableHighlight onPress={() => {
+                            me.props.vote(post.id, false);
+                        }}>
+                            <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="voteDown">&#128078;</span></Text>
+                        </TouchableHighlight>
+                        <Text>{post.voteScore}</Text>
+                        <TouchableHighlight onPress={() => {
+                            me.props.vote(post.id, true);
+                        }}>
+                            <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => {
+                            me.handleDelete(post);
+                        }}>
+                            <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => {
+                            me.handleEditPost(post);
+                        }}>
+                            <Text style={{ fontSize: 20, margin: 5 }}><span role="img" aria-labelledby="edit">&#x1F4DD;</span></Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
                 {this.renderComments(detailed, post.id)}
                 {!this.props.detailed && (
@@ -201,7 +204,7 @@ class Post extends Component {
         this.props.changeRoute("/editPost/" + post.id);
     }
 
-    handleDeleteComment(postId,cid) {
+    handleDeleteComment(postId, cid) {
         let me = this;
         Popup.registerPlugin('deletePost', function (callback) {
             this.create({
@@ -221,7 +224,7 @@ class Post extends Component {
             });
         });
         Popup.plugins().deletePost(function (value) {
-            me.props.deleteComment(postId,cid);
+            me.props.deleteComment(postId, cid);
         });
     }
 
@@ -300,10 +303,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     infoLine: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        height : 40,
     },
     categoryText: {
         fontSize: 16,
@@ -367,6 +370,9 @@ const styles = StyleSheet.create({
         padding: 6,
         borderRadius: 6,
         marginLeft: 30,
+    },
+    mainDisplay: {
+        height : 'auto',
     }
 }
 );

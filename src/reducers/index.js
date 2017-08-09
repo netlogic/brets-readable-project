@@ -163,7 +163,6 @@ function buildNewCommentArray(commentsHolder, comment, deletedId) {
     }
     let removeId = deletedId || (comment ? comment.id : undefined);
     comments = comments.filter((a) => {
-        console.log(a, comment);
         return (!a.deleted && a.id !== removeId);
     });
     if (comment) {

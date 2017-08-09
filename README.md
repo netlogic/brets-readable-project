@@ -1,6 +1,12 @@
-Welcome to the review of my readable project.
+# Welcome to the review of my readable project.
 
-## The readable project needs the backend server supplied by udacity.
+The following will be needed to be done to run this project:
+__1. The readable backend server from udacity will need to be installed.__
+__2. My project code will need to be downloaded and setup.___
+
+Steps for botth are below and then follows my project notes.
+
+## Install the readable project backend server supplied by udacity.
 
 Please make sure you have node and npm installed on your machine.
 
@@ -57,12 +63,12 @@ once the npm finishes and the command prompt return please enter
 
 ```npm start```
 
-## The project
 If all has gone well you can now browse to the following location
 to start using the project.
 
 ```http://localhost:3000```
 
+## Project Notes
 
 A lot of this project follows the structure of reactjs/redux
 I found it very clean and URLS were supported.
@@ -73,11 +79,12 @@ This blog spot about react-redux-router also was guiding me.
 This blog is very helpful in describing bind actions to an index
 http://blog.scottlogic.com/2016/05/19/redux-reducer-arrays.html
 
+I checked in my code often and all git commits can be found at:
 
-uuids for items records are created via package:
-node-uuid https://github.com/broofa/node-uuid
+https://github.com/netlogic/brets-readable-project.git
 
- As I suck at CSS I have been building a large number of my apps with react-native-web
+ As I suck at CSS I used react-native-web.
+ I have been building a large number of my apps with react-native-web
  For best display please use chrome as I have not tested the presentation of
  my app on other browsers.  Unfortunately flex-box screws up and normally
  hacks need to be implemented so presentation is improved on IE and FireFox.

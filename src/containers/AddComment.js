@@ -3,13 +3,12 @@ import { View, TextInput, TouchableHighlight, Text, StyleSheet } from 'react-nat
 
 import { connect } from 'react-redux'
 import { goBack } from 'react-router-redux'
-import AddCategoryBar from '../components/AddCategoryBar'
 import Popup from 'react-popup';
 
 import {
-    setAddPostTitle, setAddPostBody,
+    setAddPostBody,
     addComment,
-    setAddPostAuthor, setAddPostCategory
+    setAddPostAuthor
 } from '../actions'
 
 class AddComment extends Component {

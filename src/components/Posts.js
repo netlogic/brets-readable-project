@@ -45,7 +45,6 @@ class Posts extends Component {
                 <Text style={styles.numberOfPostsText}>{'Number of Posts: ' + numberOfPosts}</Text>
                 {displayPosts && (
                     displayPosts.map((post) => {
-                        console.log(post);
                         return (
                             <Post key={post.id} post={post}/>
                         );
