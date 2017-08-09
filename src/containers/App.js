@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-
+    flexBasis : '100'
   },
   addPostText : {
       fontSize: 16,

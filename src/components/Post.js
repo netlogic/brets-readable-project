@@ -148,7 +148,7 @@ class Post extends Component {
                 }
                 <View style={{height:40}}>
                     <Text numberOfLines={1} key="title" style={styles.bodyLine}>{keepShort(post.body, detailed ? 1024 : 60)}</Text>
-                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', flexBasis : '100'}}>
                         <Text><span role="img" aria-labelledby="author">&#x1f464;</span></Text>
                         <Text style={styles.infoLineText}>{post.author}</Text>
                     </View>
@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         height : 40,
+        flexBasis : '100'
     },
     categoryText: {
         fontSize: 16,
@@ -362,6 +363,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         marginBottom: 10,
+        flexBasis : '100'
     },
     addCommentText: {
         fontSize: 10,

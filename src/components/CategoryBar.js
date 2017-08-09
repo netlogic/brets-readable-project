@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height : 80,
+        flexBasis : '100'
     },
     categoryText: {
         fontSize: 14,

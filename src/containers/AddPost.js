@@ -31,7 +31,8 @@ class AddPost extends Component {
                         <Text style={props.valid ? styles.addBtnActive :  styles.addBtn} >ADD!</Text>
                     </TouchableHighlight>
                 </View>
-                <View style={{ marginLeft: 15 }}>
+
+                <View style={{ marginLeft: 15 , flexBasis : '100' ,alignItems : 'center', justifyContent : 'flex-start'}}>
                     <Text style={styles.headerLine2}>Please enter all information below and press Add!</Text>
                     <View style={styles.inputRow}>
                         <Text style={styles.inputTitle}>Title:</Text>
@@ -90,6 +91,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         backgroundColor: '#FFFFFF',
         width : '100%',
+        flexShrink : 0,
+        flexBasis : '100'
     },
     appheader: {
         width: '100%',
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-
+        flexBasis : '100'
     },
     addPostText: {
         fontSize: 16,
@@ -155,6 +158,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 15,
         width : 600,
+        flexBasis : '100'
     },
     inputTitle: {
         fontSize: 18,

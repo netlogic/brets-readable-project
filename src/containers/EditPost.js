@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-
+        flexBasis : '100'
     },
     addPostText: {
         fontSize: 16,
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 15,
         width: 600,
+        flexBasis : '100'
     },
     inputTitle: {
         fontSize: 18,
