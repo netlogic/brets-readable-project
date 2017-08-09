@@ -235,6 +235,12 @@ export const deletePostComplete = (postId) => ({
     postId: postId,
 });
 
+export const deleteCommentComplete = (postId, commentId) => ({
+    type: constants.DELETE_COMMENT_COMPLETE,
+    postId: postId,
+    commentId : commentId,
+});
+
 export const deletingPostError = (postId, error, errorText) => ({
     type: constants.DELETE_POST_ERROR,
     error: error,
@@ -268,6 +274,30 @@ export function deletePost(postId) {
             })
             .then(() => {
                 dispatch(deletePostComplete(postId));
+            })
+            .catch((e) => dispatch(deletingPostError(postId, true, e.toString())));
+    };
+}
+
+export function deleteComment(postId, commentId) {
+    return (dispatch) => {
+        dispatch(deletingPost(postId, true));
+        fetch(buildCmdURL("comments/" + commentId),
+            {
+                headers: {
+                    'Authorization': MYTOKEN,
+                },
+                method: 'delete',
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(deletingPost(postId, false));
+                return response;
+            })
+            .then(() => {
+                dispatch(deleteCommentComplete(postId, commentId));
             })
             .catch((e) => dispatch(deletingPostError(postId, true, e.toString())));
     };

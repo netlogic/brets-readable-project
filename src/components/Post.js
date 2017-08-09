@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native-web'
 import { connect } from 'react-redux'
 import { push, goBack } from 'react-router-redux'
-import { fetchComments, voteComment, vote, deletePost, clearPostDetail, clearAddPost } from '../actions'
+import { fetchComments, voteComment, vote, 
+        deleteComment,
+        deletePost, clearPostDetail, clearAddPost } from '../actions'
 import Popup from 'react-popup';
 
 function keepShort(a, len) {
@@ -65,7 +67,7 @@ class Post extends Component {
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="voteUp">&#128077;</span></Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
-                                //me.handleDelete(post);
+                                me.handleDeleteComment(postId,c.id);
                             }}>
                                 <Text style={{ fontSize: 14, margin: 5 }}><span role="img" aria-labelledby="delete">&#128465;</span></Text>
                             </TouchableHighlight>
@@ -183,6 +185,31 @@ class Post extends Component {
         this.props.changeRoute("/editPost/" + post.id);
     }
 
+    handleDeleteComment(postId,cid) {
+        let me = this;
+        Popup.registerPlugin('deletePost', function (callback) {
+            this.create({
+                title: 'Delete Comment',
+                content: <Text>{"Are you sure you want to delete this comment?"}</Text>,
+                buttons: {
+                    left: ['cancel'],
+                    right: [{
+                        text: 'DELETE',
+                        className: 'success',
+                        action: function () {
+                            callback(true);
+                            Popup.close();
+                        }
+                    }]
+                }
+            });
+        });
+        Popup.plugins().deletePost(function (value) {
+            me.props.deleteComment(postId,cid);
+        });
+    }
+
+
     handleDelete(post) {
         let me = this;
         Popup.registerPlugin('deletePost', function (callback) {
@@ -235,6 +262,7 @@ function mapDispatchToProps(dispatch) {
         deletePost: (postId) => dispatch(deletePost(postId)),
         clearPostDetail: () => dispatch(clearPostDetail()),
         clearAddPost: () => dispatch(clearAddPost()),
+        deleteComment: (postId, commentId) => dispatch(deleteComment(postId, commentId)),
         dispatch,
     };
 }

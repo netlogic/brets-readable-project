@@ -153,7 +153,7 @@ function deletingPost(state, postId, error, errorText, loading, post) {
     }
 }
 
-function buildNewCommentArray(commentsHolder, comment) {
+function buildNewCommentArray(commentsHolder, comment , deletedId ) {
     if (!commentsHolder) {
         commentsHolder = {};
     }
@@ -161,11 +161,14 @@ function buildNewCommentArray(commentsHolder, comment) {
     if ( !comments ) {
         comments = [];
     }
+    let removeId = deletedId || ( comment ? comment.id : undefined );
     comments = comments.filter((a) => {
         console.log(a,comment);
-        return ( !a.deleted  && (a.id !== comment.id) );
+        return ( !a.deleted && a.id !== removeId );
     });
-    comments.push( comment );
+    if ( comment ) {
+        comments.push( comment );
+    }
     return comments;
 }
 
@@ -272,6 +275,19 @@ const appState = (state = initialState, action) => {
                     loading: false,
                     errorLoading: false,
                     comments: buildNewCommentArray( state.comments ? (state.comments[action.comment.parentId]) : [], action.comment),
+                }
+            }
+            return {
+                ...state,
+                comments: newcomments
+            }
+        case constants.DELETE_COMMENT_COMPLETE:
+                newcomments = {
+                ...state.comments,
+                [action.postId]: {
+                    loading: false,
+                    errorLoading: false,
+                    comments: buildNewCommentArray( state.comments ? (state.comments[action.postId]) : [], null , action.commentId),
                 }
             }
             return {
